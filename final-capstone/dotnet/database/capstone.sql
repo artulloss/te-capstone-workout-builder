@@ -20,9 +20,28 @@ CREATE TABLE users (
 	username varchar(50) NOT NULL,
 	password_hash varchar(200) NOT NULL,
 	salt varchar(200) NOT NULL,
-	user_role varchar(50) NOT NULL
+	user_role varchar(50) NOT NULL,
+
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 )
+
+CREATE TABLE focuses (
+	focus_id int IDENTITY(1,1) NOT NULL,
+	focus_name varchar(50) NOT NULL,
+
+	CONSTRAINT PK_focuses PRIMARY KEY (focus_id)
+)
+
+CREATE TABLE exercises (
+	exercise_id int IDENTITY(1,1) NOT NULL,
+	exercise_name varchar(50) NOT NULL,
+	focus_id int NOT NULL
+
+	CONSTRAINT PK_exercises PRIMARY KEY (exercise_id)
+	constraint fk_exercises_focus foreign key (focus_id) references focuses(focus_id)
+)
+
+
 
 --populate default data
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('user','Jg45HuwT7PZkfuKTz6IB90CtWY4=','LHxP4Xh7bN0=','user');
