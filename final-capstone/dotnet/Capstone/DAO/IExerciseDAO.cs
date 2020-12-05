@@ -5,7 +5,7 @@ namespace Capstone.DAO
 {
     public interface IExerciseDAO
     {
-        List<Exercise> GetAllExercises();
-        Exercise GetExercise();
+        List<Exercise> GetExercises();
+        Exercise GetExercise(int id);
     }
 }

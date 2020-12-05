@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using Capstone.Models;
 
 namespace Capstone.DAO
@@ -12,9 +13,8 @@ namespace Capstone.DAO
         {
             _connectionString = connectionString;
         }
-
-
-        public List<Exercise> GetAllExercises()
+        
+        public List<Exercise> GetExercises()
         {
             List<Exercise> exercises = new List<Exercise>();
             try {
@@ -37,9 +37,22 @@ namespace Capstone.DAO
             return exercises;
         }
 
-        public Exercise GetExercise()
-        {
-            throw new NotImplementedException();
+        public Exercise GetExercise(int id) {
+            try {
+                using (SqlConnection conn = new SqlConnection(_connectionString)) {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM exercises WHERE exercise_id = @exercise_id", conn);
+                    cmd.Parameters.AddWithValue("@exercise_id", id);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    reader.Read();
+                    return ReaderToExercise(reader);
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            } 
         }
 
         Exercise ReaderToExercise(SqlDataReader reader) {
