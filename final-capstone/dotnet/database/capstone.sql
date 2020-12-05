@@ -35,11 +35,25 @@ CREATE TABLE focuses (
 CREATE TABLE exercises (
 	exercise_id int IDENTITY(1,1) NOT NULL,
 	exercise_name varchar(50) NOT NULL,
-	focus_id int NOT NULL
+	focus_id int NOT NULL,
+	description varchar(200) NOT NULL,
+	weight varchar(50),
+	time varchar(50) NOT NULL,
+	repetition int
 
 	CONSTRAINT PK_exercises PRIMARY KEY (exercise_id)
 	constraint fk_exercises_focus foreign key (focus_id) references focuses(focus_id)
 )
+
+CREATE TABLE userExercises (
+	user_id int NOT NULL,
+	exercise_id int NOT NULL,
+
+	constraint fk_userExercises_user foreign key (user_id) references users(user_id),
+	constraint fk_userExercises_exercise foreign key (exercise_id) references exercises(exercise_id)
+)
+
+
 
 
 
