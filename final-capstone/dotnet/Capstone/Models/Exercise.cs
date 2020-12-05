@@ -18,5 +18,7 @@
         
         public int? Sets { get; set; }
 
+        public int UserId { get; set; }
+
     }
 }

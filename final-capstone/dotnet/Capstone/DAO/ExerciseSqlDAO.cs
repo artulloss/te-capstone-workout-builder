@@ -55,8 +55,10 @@ namespace Capstone.DAO
             } 
         }
 
-        Exercise ReaderToExercise(SqlDataReader reader) {
-            return new Exercise {
+        Exercise ReaderToExercise(SqlDataReader reader) 
+        {
+            return new Exercise 
+            {
                 ExerciseId = Convert.ToInt32(reader["exercise_id"]),
                 ExerciseName = Convert.ToString(reader["exercise_name"]),
                 FocusId = Convert.ToInt32(reader["focus_id"]),
@@ -64,7 +66,8 @@ namespace Capstone.DAO
                 Weight = (int?) (reader["weight"] != DBNull.Value ? reader["weight"] : null),
                 Time = Convert.ToInt32(reader["time"]), 
                 Repetitions = (int?) (reader["repetitions"] != DBNull.Value ? reader["repetitions"] : null),
-                Sets = (int?) (reader["sets"] != DBNull.Value ? reader["sets"] : null)
+                Sets = (int?) (reader["sets"] != DBNull.Value ? reader["sets"] : null),
+                UserId = Convert.ToInt32(reader["user_id"])
             };
         }
     }
