@@ -9,11 +9,32 @@ namespace Capstone.DAO
 {
     public class UserSqlDAO : IUserDAO
     {
-        private readonly string connectionString;
+        private readonly string _connectionString;
 
         public UserSqlDAO(string dbConnectionString)
         {
-            connectionString = dbConnectionString;
+            _connectionString = dbConnectionString;
+        }
+
+        public List<User> GetUsers() {
+            List<User> users = new List<User>();
+            try {
+                using (SqlConnection conn = new SqlConnection(_connectionString)) {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM users", conn);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read()) {
+                        //if (!reader.HasRows) continue;
+                        users.Add(GetUserFromReader(reader));
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return users;
         }
 
         public User GetUser(string username)
@@ -22,7 +43,7 @@ namespace Capstone.DAO
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     conn.Open();
 
@@ -36,8 +57,9 @@ namespace Capstone.DAO
                     }
                 }
             }
-            catch (SqlException)
+            catch (SqlException e)
             {
+                Console.WriteLine(e);
                 throw;
             }
 
@@ -52,7 +74,7 @@ namespace Capstone.DAO
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     conn.Open();
 
@@ -64,17 +86,55 @@ namespace Capstone.DAO
                     cmd.ExecuteNonQuery();
                 }
             }
-            catch (SqlException)
+            catch (SqlException e)
             {
+                Console.WriteLine(e);
                 throw;
             }
 
             return GetUser(username);
         }
 
+        private List<Exercise> GetExercises(string username, string query) {
+            List<Exercise> exercises = new List<Exercise>();
+            try {
+                using (SqlConnection conn = new SqlConnection(_connectionString)) {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(
+                        query, conn
+                    );
+                    cmd.Parameters.AddWithValue("@username", username);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read()) {
+                        exercises.Add(ExerciseSqlDAO.ReaderToExercise(reader));
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            return exercises;
+        }
+
+        public List<Exercise> GetUserExercises(string username) {
+            return GetExercises(username, 
+            @"SELECT e.* FROM exercises e
+                    INNER JOIN userExercises ue ON e.exercise_id = ue.exercise_id
+                    INNER JOIN users u ON u.user_id = ue.user_id
+                    WHERE u.username = @username");
+        }
+
+        public List<Exercise> GetTrainerExercises(string username) {
+            return GetExercises(username,
+                @"SELECT * FROM exercises WHERE user_id = (SELECT user_id FROM users WHERE username = @username)");
+        }
+
         private User GetUserFromReader(SqlDataReader reader)
         {
-            User u = new User()
+            User u = new User
             {
                 UserId = Convert.ToInt32(reader["user_id"]),
                 Username = Convert.ToString(reader["username"]),

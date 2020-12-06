@@ -55,7 +55,7 @@ namespace Capstone.DAO
             } 
         }
 
-        Exercise ReaderToExercise(SqlDataReader reader) 
+        public  static Exercise ReaderToExercise(SqlDataReader reader) 
         {
             return new Exercise 
             {
