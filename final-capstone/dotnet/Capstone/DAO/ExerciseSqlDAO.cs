@@ -68,31 +68,10 @@ namespace Capstone.DAO
                     insertCmd.Parameters.AddWithValue("@exercise_name", exercise.ExerciseName);
                     insertCmd.Parameters.AddWithValue("@focus_id", exercise.FocusId);
                     insertCmd.Parameters.AddWithValue("@description", exercise.Description);
-                    if(exercise.Weight != null)
-                    {
-                        insertCmd.Parameters.AddWithValue("@weight", exercise.Weight);
-                    }
-                    else
-                    {
-                        insertCmd.Parameters.AddWithValue("@weight", DBNull.Value);
-                    }
+                    insertCmd.Parameters.AddWithValue("@weight", exercise.Weight ?? (object) DBNull.Value);
                     insertCmd.Parameters.AddWithValue("@time", exercise.Time);
-                    if (exercise.Repetitions != null)
-                    {
-                        insertCmd.Parameters.AddWithValue("@repetitions", exercise.Repetitions);
-                    }
-                    else
-                    {
-                        insertCmd.Parameters.AddWithValue("@repetitions", DBNull.Value);
-                    }
-                    if (exercise.Sets != null)
-                    {
-                        insertCmd.Parameters.AddWithValue("@sets", exercise.Sets);
-                    }
-                    else
-                    {
-                        insertCmd.Parameters.AddWithValue("@sets", DBNull.Value);
-                    }                    
+                    insertCmd.Parameters.AddWithValue("@repetitions", exercise.Repetitions ?? (object)DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@sets", exercise.Sets ?? (object)DBNull.Value);
                     insertCmd.Parameters.AddWithValue("@user_id", exercise.UserId);
 
                     int numRowsAffected = insertCmd.ExecuteNonQuery();
