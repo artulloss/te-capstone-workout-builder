@@ -48,7 +48,7 @@ CREATE TABLE exercises (
 							   constraint fk_exercises_user foreign key (user_id) references users(user_id)
 )
 
-
+--purpose of this table is to store exercises for user (what they currently have)
 CREATE TABLE userExercises (
                                user_id int NOT NULL,
                                exercise_id int NOT NULL,
@@ -56,10 +56,6 @@ CREATE TABLE userExercises (
                                constraint fk_userExercises_user foreign key (user_id) references users(user_id),
                                constraint fk_userExercises_exercise foreign key (exercise_id) references exercises(exercise_id)
 )
-
-
-
-
 
 --populate default data
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('user','Jg45HuwT7PZkfuKTz6IB90CtWY4=','LHxP4Xh7bN0=','user');

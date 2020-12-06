@@ -36,5 +36,13 @@ namespace Capstone.Controllers
         public Exercise GetExerciseById(int id) {
             return _exerciseDao.GetExercise(id);
         }
+
+        [HttpPost]
+        public ActionResult<Exercise> AddExercise(Exercise newExercise)
+        {
+            newExercise = _exerciseDao.AddExercise(newExercise);
+            return newExercise != null ? (ActionResult) Created($"/exercise/{newExercise.ExerciseId}", newExercise) : BadRequest();
+        }
+
     }
 }
