@@ -1,14 +1,51 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
-    </div>
-    <router-view />
-  </div>
+  <router-vue><v-app>
+    <v-app-bar app color="primary" dark>
+      <div class="d-flex align-center">
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink mr-2"
+          contain
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          transition="scale-transition"
+          width="40"
+        />
+
+        <v-img
+          alt="Vuetify Name"
+          class="shrink mt-1 hidden-sm-and-down"
+          contain
+          min-width="100"
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
+          width="100"
+        />
+      </div>
+
+      <v-spacer></v-spacer>
+      <v-btn v-bind:to="{ name: 'login' }" text>
+        <span class="mr-2">Login</span>
+        <v-icon>mdi-login</v-icon>
+      </v-btn>
+    </v-app-bar>
+    <v-main>
+
+    </v-main>
+  </v-app>
+  </router-vue>
 </template>
 
-<style>
-* {box-sizing: border-box;}
+<script>
+import HelloWorld from "./components/HelloWorld";
 
-</style>
+export default {
+  name: "App",
+
+  components: {
+    HelloWorld,
+  },
+
+  data: () => ({
+    //
+  }),
+};
+</script>
