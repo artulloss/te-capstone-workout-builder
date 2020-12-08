@@ -1,75 +1,122 @@
 <template>
-  <div id="register" class="text-center">
-    <form class="form-register" @submit.prevent="register">
-      <h1 class="h3 mb-3 font-weight-normal">Create Account</h1>
-      <div class="alert alert-danger" role="alert" v-if="registrationErrors">
-        {{ registrationErrorMsg }}
-      </div>
-      <label for="username" class="sr-only">Username</label>
-      <input
-        type="text"
-        id="username"
-        class="form-control"
-        placeholder="Username"
-        v-model="user.username"
-        required
-        autofocus
-      />
-      <label for="password" class="sr-only">Password</label>
-      <input
-        type="password"
-        id="password"
-        class="form-control"
-        placeholder="Password"
-        v-model="user.password"
-        required
-      />
-      <input
-        type="password"
-        id="confirmPassword"
-        class="form-control"
-        placeholder="Confirm Password"
-        v-model="user.confirmPassword"
-        required
-      />
-      <router-link :to="{ name: 'login' }">Have an account?</router-link>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">
-        Create Account
-      </button>
-    </form>
-  </div>
+  <v-card width="400" class="mx-auto mt-5">
+    <v-card-title>
+      <h1 class="display-1">Create Account</h1>
+    </v-card-title>
+    <v-card-text>
+      <v-form class="form-signin" @submit.prevent="register">
+        <div class="alert alert-danger" role="alert" v-if="invalidCredentials">
+          Invalid username and password!
+        </div>
+        <div
+          class="alert alert-success"
+          role="alert"
+          v-if="this.$route.query.registration"
+        >
+          Thank you for registering, please sign in.
+        </div>
+
+        <v-text-field
+          id="username"
+          outlined
+          prepend-icon="mdi-account-circle"
+          class="form-control"
+          v-model="user.username"
+          :usernameRules="usernameRules"
+          :counter="50"
+          label="Username"
+          required
+          autofocus
+        ></v-text-field>
+
+        <v-text-field
+          id="password"
+          outlined
+          class="form-control"
+          prepend-icon="mdi-lock"
+          v-model="user.password"
+          :rules="usernameRules"
+          :counter="50"
+          :type="show1 ? 'text' : 'password'"
+          label="Password"
+          required
+          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+          @click:append="show1 = !show1"
+        ></v-text-field>
+
+        <v-text-field
+          id="confirmPassword"
+          class="form-control"
+          :rules="confirmPasswordRules"
+          outlined
+          prepend-icon="mdi-lock"
+          v-model="retypePassword"
+          :passwordRules="passwordRules"
+          :counter="50"
+          :type="show2 ? 'text' : 'password'"
+          label="Confirm Password"
+          required
+          :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+          @click:append="show2 = !show2"
+        ></v-text-field>
+
+        <v-divider />
+        <v-card-actions>
+          <v-btn color="info" :to="{ name: 'login' }"
+            ><span>Have an account?</span></v-btn
+          >
+          <v-spacer />
+          <v-btn color="success" type="submit"><span>Register</span></v-btn>
+        </v-card-actions>
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
-import authService from '../services/AuthService';
+import authService from "../services/AuthService";
 
 export default {
-  name: 'register',
+  name: "register",
   data() {
     return {
       user: {
-        username: '',
-        password: '',
-        confirmPassword: '',
-        role: 'user',
+        username: "",
+        password: "",
+        confirmPassword: "",
+        role: "user",
       },
       registrationErrors: false,
-      registrationErrorMsg: 'There were problems registering this user.',
+      registrationErrorMsg: "There were problems registering this user.",
+      show1: false,
+      show2: false,
+      retypePassword: "",
+      usernameRules: [
+        (v) =>
+          (v || "").length <= 50 || `A maximum of 50 characters is allowed`,
+        (v) => (v || "").indexOf(" ") < 0 || "No spaces are allowed",
+      ],
+      passwordRules: [() => true],
+      confirmPasswordRules: [
+        () =>
+          this.user.password === this.retypePassword ||
+          "Passwords do not match",
+      ],
     };
   },
   methods: {
     register() {
       if (this.user.password != this.user.confirmPassword) {
         this.registrationErrors = true;
-        this.registrationErrorMsg = 'Password & Confirm Password do not match.';
+        this.registrationErrorMsg = "Password & Confirm Password do not match.";
       } else {
         authService
           .register(this.user)
           .then((response) => {
             if (response.status == 201) {
               this.$router.push({
-                path: '/login',
-                query: { registration: 'success' },
+                path: "/login",
+                query: { registration: "success" },
               });
             }
           })
@@ -77,14 +124,14 @@ export default {
             const response = error.response;
             this.registrationErrors = true;
             if (response.status === 400) {
-              this.registrationErrorMsg = 'Bad Request: Validation Errors';
+              this.registrationErrorMsg = "Bad Request: Validation Errors";
             }
           });
       }
     },
     clearErrors() {
       this.registrationErrors = false;
-      this.registrationErrorMsg = 'There were problems registering this user.';
+      this.registrationErrorMsg = "There were problems registering this user.";
     },
   },
 };

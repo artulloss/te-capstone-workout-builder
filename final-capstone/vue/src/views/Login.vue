@@ -1,44 +1,58 @@
 <template>
-  <div id="login" class="text-center">
-    <v-form class="form-signin" @submit.prevent="login">
-      <h1 class="h3 mb-3 font-weight-normal">Please Sign In</h1>
-      <div class="alert alert-danger" role="alert" v-if="invalidCredentials">
-        Invalid username and password!
-      </div>
-      <div
-        class="alert alert-success"
-        role="alert"
-        v-if="this.$route.query.registration"
-      >
-        Thank you for registering, please sign in.
-      </div>
-      <v-text-field
-        id="username"
-        class="form-control"
-        v-model="user.username"
-        :usernameRules="usernameRules"
-        :counter="50"
-        label="Username"
-        required
-        autofocus
-      ></v-text-field>
-      <v-text-field
-        id="password"
-        class="form-control"
-        v-model="user.password"
-        :usernameRules="usernameRules"
-        :counter="50"
-        :type="show ? 'text' : 'password'"
-        label="Password"
-        required
-        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-        @click:append="show = !show"
-      ></v-text-field>
-      <v-btn :to="{ name: 'register' }"><span>Register</span></v-btn>
-      <v-spacer />
-      <v-btn type="submit"><span>Sign in</span></v-btn>
-    </v-form>
-  </div>
+  <v-card width="400" class="mx-auto mt-5">
+    <v-card-title>
+      <h1 class="display-1">Login</h1>
+    </v-card-title>
+    <v-card-text>
+      <v-form class="form-signin" @submit.prevent="login">
+        <div class="alert alert-danger" role="alert" v-if="invalidCredentials">
+          Invalid username and password!
+        </div>
+        <div
+          class="alert alert-success"
+          role="alert"
+          v-if="this.$route.query.registration"
+        >
+          Thank you for registering, please sign in.
+        </div>
+
+        <v-text-field
+          id="username"
+          outlined
+          prepend-icon="mdi-account-circle"
+          class="form-control"
+          v-model="user.username"
+          :rules="usernameRules"
+          :counter="50"
+          label="Username"
+          required
+          autofocus
+        ></v-text-field>
+        <v-text-field
+          id="password"
+          outlined
+          class="form-control"
+          prepend-icon="mdi-lock"
+          v-model="user.password"
+          :rules="passwordRules"
+          :counter="50"
+          :type="show ? 'text' : 'password'"
+          label="Password"
+          required
+          :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+          @click:append="show = !show"
+        ></v-text-field>
+        <v-divider />
+        <v-card-actions>
+          <v-btn color="success" :to="{ name: 'register' }"
+            ><span>Register</span></v-btn
+          >
+          <v-spacer />
+          <v-btn color="info" type="submit"><span>Sign in</span></v-btn>
+        </v-card-actions>
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
