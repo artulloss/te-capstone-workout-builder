@@ -7,6 +7,7 @@ import Exercises from "../views/Exercises.vue";
 import Register from "../views/Register.vue";
 import store from "../store/index";
 import Landing from "../views/Landing.vue";
+import CreateExercise from "../views/CreateExercise.vue"
 
 Vue.use(Router);
 
@@ -71,6 +72,14 @@ const router = new Router({
         requiresAuth: true,
       },
     },
+    {
+      path: "/create-exercise",
+      name: "exercise",
+      component: CreateExercise,
+      meta: {
+        requiresAuth: true,
+      },
+    }
   ],
 });
 
