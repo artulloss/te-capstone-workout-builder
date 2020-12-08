@@ -1,6 +1,6 @@
 <template>
   <div id="login" class="text-center">
-    <form class="form-signin" @submit.prevent="login">
+    <v-form class="form-signin" @submit.prevent="login">
       <h1 class="h3 mb-3 font-weight-normal">Please Sign In</h1>
       <div class="alert alert-danger" role="alert" v-if="invalidCredentials">
         Invalid username and password!
@@ -12,28 +12,32 @@
       >
         Thank you for registering, please sign in.
       </div>
-      <label for="username" class="sr-only">Username</label>
-      <input
-        type="text"
+      <v-text-field
         id="username"
         class="form-control"
-        placeholder="Username"
         v-model="user.username"
+        :usernameRules="usernameRules"
+        :counter="50"
+        label="Username"
         required
         autofocus
-      />
-      <label for="password" class="sr-only">Password</label>
-      <input
-        type="password"
+      ></v-text-field>
+      <v-text-field
         id="password"
         class="form-control"
-        placeholder="Password"
         v-model="user.password"
+        :usernameRules="usernameRules"
+        :counter="50"
+        :type="show ? 'text' : 'password'"
+        label="Password"
         required
-      />
-      <router-link :to="{ name: 'register' }">Need an account?</router-link>
-      <button type="submit">Sign in</button>
-    </form>
+        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+        @click:append="show = !show"
+      ></v-text-field>
+      <v-btn :to="{ name: 'register' }"><span>Register</span></v-btn>
+      <v-spacer />
+      <v-btn type="submit"><span>Sign in</span></v-btn>
+    </v-form>
   </div>
 </template>
 
@@ -50,6 +54,14 @@ export default {
         password: "",
       },
       invalidCredentials: false,
+      usernameRules: [
+        (v) =>
+          (v || "").length <= 50 || `A maximum of 50 characters is allowed`,
+        (v) => (v || "").indexOf(" ") < 0 || "No spaces are allowed",
+      ],
+      passwordRules: [() => true], // TODO Eventually use regex to validate password strength
+      // https://stackoverflow.com/questions/5142103/regex-to-validate-password-strength
+      show: false,
     };
   },
   methods: {

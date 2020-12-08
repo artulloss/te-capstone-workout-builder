@@ -1,5 +1,5 @@
 <template>
-  <router-vue><v-app>
+  <v-app>
     <v-app-bar app color="primary" dark>
       <div class="d-flex align-center">
         <v-img
@@ -28,21 +28,16 @@
       </v-btn>
     </v-app-bar>
     <v-main>
-
+      <router-view />
     </v-main>
   </v-app>
-  </router-vue>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
-
 export default {
   name: "App",
 
-  components: {
-    HelloWorld,
-  },
+  components: {},
 
   data: () => ({
     //
