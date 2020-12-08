@@ -7,3 +7,8 @@
     <router-view />
   </div>
 </template>
+
+<style>
+* {box-sizing: border-box;}
+
+</style>

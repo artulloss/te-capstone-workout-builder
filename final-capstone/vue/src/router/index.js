@@ -6,6 +6,7 @@ import Logout from "../views/Logout.vue";
 import Exercises from "../views/Exercises.vue";
 import Register from "../views/Register.vue";
 import store from "../store/index";
+import Landing from "../views/Landing.vue";
 
 Vue.use(Router);
 
@@ -24,6 +25,14 @@ const router = new Router({
   routes: [
     {
       path: "/",
+      name: "landing",
+      component: Landing,
+      meta: {
+        requiresAuth: false,
+      },
+    }
+    {
+      path: "/home",
       name: "home",
       component: Home,
       meta: {
