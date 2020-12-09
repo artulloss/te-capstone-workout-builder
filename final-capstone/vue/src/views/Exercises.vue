@@ -82,23 +82,31 @@ export default {
   methods: {
     getFocusId() {
       let arrayWithFocusObj = this.focuses.filter((f) => {
-        console.log(f.focusName, this.focusFilter.toLowerCase());
-        return f.focusName === this.focusFilter.toLowerCase();
+        return f.focusName === (this.focusFilter || "").toLowerCase();
       });
-      return arrayWithFocusObj[0].focusId;
+      return (arrayWithFocusObj[0] || { focusId: undefined }).focusId;
     },
     filter() {
-      let filter = [];
-      if (this.focusFilter === []) {
-        filter.concat({ focusId: this.focusFilter });
+      const filter = [];
+      console.log(
+        "FocusFilter",
+        this.focusFilter,
+        "TimeFilter",
+        this.timeFilter
+      );
+      console.log("this.focusFilter !== []", this.focusFilter !== []);
+      if (this.focusFilter !== []) {
+        const focusId = this.getFocusId();
+        if (focusId !== undefined) filter.push({ focusId: focusId });
       }
       if (this.timeFilter) {
-        filter.concat({ time: this.timeFilter });
+        filter.push({ time: this.timeFilter });
       }
+      console.log("Filter", filter);
       exerciseService
         .getTrainerExercise(this.$store.state.user.username, filter)
         .then((response) => {
-          console.log(response)
+          console.log(response);
           if (response.status === 200) {
             console.log(response);
             this.exercises = response.data;

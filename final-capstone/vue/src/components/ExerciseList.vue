@@ -2,7 +2,7 @@
   <div>
     <div v-for="e in exercises" :key="e.exerciseId">
       <h3 v-on:click="toggleExerciseVisible(e.exerciseId)">
-        {{ e.exerciseName }}
+        {{ e.exerciseName }} - Time: {{ e.time }} seconds
       </h3>
       <!-- <div> -->
       <div v-if="exerciseVisibility[e.exerciseId]">
@@ -14,7 +14,6 @@
 
 <script>
 import Vue from "vue";
-
 
 export default {
   name: "exercise-list",
