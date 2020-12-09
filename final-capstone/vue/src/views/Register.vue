@@ -45,7 +45,7 @@
         ></v-text-field>
 
         <v-text-field
-          id="confirmPassword"
+          id="confirm-password"
           class="form-control"
           :rules="confirmPasswordRules"
           outlined

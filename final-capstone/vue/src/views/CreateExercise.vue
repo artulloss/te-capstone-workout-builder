@@ -5,11 +5,11 @@
     </v-card-title>
     <v-card-text>
       <v-form class="form-signin" @submit.prevent="createExercise">
-        <div class="alert alert-danger" role="alert" v-if="false">
-          There was a problem creating the exercise.
+        <div class="alert alert-danger" role="alert" v-if="errorMessage !== ''">
+          {{ errorMessage }}
         </div>
         <v-text-field
-          id="exerciseName"
+          id="exercise-name"
           outlined
           class="form-control"
           v-model="exercise.exerciseName"
@@ -46,14 +46,12 @@
           v-model.number="exercise.time"
           required
           class="form-control"
-        >
-          <v-icon slot="append" @click="exercise.time++">
-            mdi-chevron-up
-          </v-icon>
-          <v-icon slot="prepend" @click="exercise.time--">
-            mdi-chevron-down
-          </v-icon>
-        </v-text-field>
+          :rules="requiredNumericRules"
+          append-outer-icon="mdi-chevron-up"
+          prepend-icon="mdi-chevron-down"
+          @click:append-outer="exercise.time += 10"
+          @click:prepend="exercise.time -= 10"
+        />
         <v-text-field
           id="weight"
           suffix="lbs"
@@ -62,14 +60,11 @@
           :rules="numericRules"
           label="Weight"
           v-model.number="exercise.weight"
-        >
-          <v-icon slot="append" @click="exercise.weight++">
-            mdi-chevron-up
-          </v-icon>
-          <v-icon slot="prepend" @click="exercise.weight--">
-            mdi-chevron-down
-          </v-icon>
-        </v-text-field>
+          append-outer-icon="mdi-chevron-up"
+          prepend-icon="mdi-chevron-down"
+          @click:append-outer="exercise.weight++"
+          @click:prepend="exercise.weight--"
+        />
         <v-text-field
           id="repetitions"
           outlined
@@ -77,14 +72,11 @@
           :rules="numericRules"
           label="Repetitions"
           v-model.number="exercise.repetitions"
-        >
-          <v-icon slot="append" @click="exercise.repetitions++">
-            mdi-chevron-up
-          </v-icon>
-          <v-icon slot="prepend" @click="exercise.repetitions--">
-            mdi-chevron-down
-          </v-icon>
-        </v-text-field>
+          append-outer-icon="mdi-chevron-up"
+          prepend-icon="mdi-chevron-down"
+          @click:append-outer="exercise.repetitions++"
+          @click:prepend="exercise.repetitions--"
+        />
         <v-text-field
           id="sets"
           outlined
@@ -92,14 +84,12 @@
           :rules="numericRules"
           label="Sets"
           v-model.number="exercise.sets"
-        >
-          <v-icon slot="append" @click="exercise.sets++">
-            mdi-chevron-up
-          </v-icon>
-          <v-icon slot="prepend" @click="exercise.sets--">
-            mdi-chevron-down
-          </v-icon>
-        </v-text-field>
+          append-outer-icon="mdi-chevron-up"
+          prepend-icon="mdi-chevron-down"
+          @click:append-outer="exercise.sets++"
+          @click:prepend="exercise.sets--"
+        />
+        <p id="error-msg"></p>
         <v-divider />
         <v-card-actions>
           <v-btn color="success" :to="{ name: 'register' }"
@@ -112,6 +102,12 @@
     </v-card-text>
   </v-card>
 </template>
+
+<style scoped>
+.alert-danger {
+  color: red;
+}
+</style>
 
 <script>
 import exerciseService from "../services/ExerciseService";
@@ -155,12 +151,19 @@ export default {
       ],
       focuses: [],
       pickedFocusName: "",
+      errorMessage: "",
     };
   },
   computed: {
     focusNames() {
       return this.focuses.map(
         (f) => f.focusName.charAt(0).toUpperCase() + f.focusName.slice(1) // Capitalize first letter :p
+      );
+    },
+    requiredNumericRules() {
+      return (
+        this.numericRules.concat((v) => (v || "").length !== 0) ||
+        "This is a required field"
       );
     },
   },
@@ -170,9 +173,29 @@ export default {
         console.log(f.focusName, this.pickedFocusName.toLowerCase());
         return f.focusName === this.pickedFocusName.toLowerCase();
       });
-      this.exercise.focusId = arrayWithFocusObj[0].focusId; // This should *always* work
+      const exercise = this.exercise;
+      let field;
+      console.log("Exercise", exercise.name, !exercise.name);
+      if (!exercise.time) {
+        field = "Time";
+      }
+      if (!arrayWithFocusObj[0]) {
+        field = "Focus";
+      }
+      if (!exercise.description) {
+        field = "Description";
+      }
+      if (!exercise.exerciseName) {
+        field = "Name";
+      }
+      if (field) {
+        this.errorMessage = `${field} is required!`;
+        return;
+      }
+      this.errorMessage = "";
+      exercise.focusId = arrayWithFocusObj[0].focusId; // This should *always* work
       exerciseService
-        .postExercise(this.exercise)
+        .postExercise(exercise)
         .then((response) => {
           console.log(response.status);
           if (response.status === 201) {
