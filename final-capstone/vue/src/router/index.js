@@ -74,7 +74,7 @@ const router = new Router({
     },
     {
       path: "/create-exercise",
-      name: "exercise",
+      name: "create-exercise",
       component: CreateExercise,
       meta: {
         requiresAuth: true,

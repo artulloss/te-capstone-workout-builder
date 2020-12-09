@@ -14,25 +14,14 @@
 
 <script>
 import Vue from "vue";
-import exerciseService from "@/services/ExerciseService";
+
 
 export default {
   name: "exercise-list",
   data() {
     return {
-      exercises: [],
       exerciseVisibility: [],
     };
-  },
-  created() {
-    exerciseService
-      .getTrainerExercise(this.$store.state.user.username)
-      .then((response) => {
-        if (response.status === 200) {
-          console.log(response);
-          this.exercises = response.data;
-        }
-      });
   },
   methods: {
     toggleExerciseVisible(exerciseId) {
@@ -42,6 +31,9 @@ export default {
         !this.exerciseVisibility[exerciseId]
       );
     },
+  },
+  props: {
+    exercises: Array,
   },
 };
 </script>
