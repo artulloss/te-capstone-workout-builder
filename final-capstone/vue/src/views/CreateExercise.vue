@@ -24,25 +24,81 @@
           outlined
           class="form-control"
           v-model="exercise.description"
-          :rules="exerciseNameRules"
           :counter="2000"
           label="Description"
           required
         ></v-textarea>
-        <v-text-field
-          id="time"
+        <v-combobox
+          id="focus"
           outlined
           class="form-control"
-          :rules="exerciseNameRules"          
-          label="Time"
+          :rules="focusRules"
+          label="Focus"
+          :items="focusNames"
+          v-model="pickedFocusName"
           required
-          v-model.number="exercise.time" 
-          append-outer-icon="mdi-keyboard_arrow_up" 
-          @click:append-outer="exercise.time++" 
-          prepend-icon="mdi-keyboard_arrow_down" 
-          @click:prepend="exercise.time--">
-        >     
-        <v-icon slot="append" color="red">mdi-keyboard_arrow_up</v-icon><v-icon slot="prepend" color="green">mdi-keyboard_arrow_down</v-icon>
+        />
+        <v-text-field
+          id="time"
+          suffix="seconds"
+          outlined
+          label="Time"
+          v-model.number="exercise.time"
+          required
+          class="form-control"
+        >
+          <v-icon slot="append" @click="exercise.time++">
+            mdi-chevron-up
+          </v-icon>
+          <v-icon slot="prepend" @click="exercise.time--">
+            mdi-chevron-down
+          </v-icon>
+        </v-text-field>
+        <v-text-field
+          id="weight"
+          suffix="lbs"
+          outlined
+          class="form-control"
+          :rules="numericRules"
+          label="Weight"
+          v-model.number="exercise.weight"
+        >
+          <v-icon slot="append" @click="exercise.weight++">
+            mdi-chevron-up
+          </v-icon>
+          <v-icon slot="prepend" @click="exercise.weight--">
+            mdi-chevron-down
+          </v-icon>
+        </v-text-field>
+        <v-text-field
+          id="repetitions"
+          outlined
+          class="form-control"
+          :rules="numericRules"
+          label="Repetitions"
+          v-model.number="exercise.repetitions"
+        >
+          <v-icon slot="append" @click="exercise.repetitions++">
+            mdi-chevron-up
+          </v-icon>
+          <v-icon slot="prepend" @click="exercise.repetitions--">
+            mdi-chevron-down
+          </v-icon>
+        </v-text-field>
+        <v-text-field
+          id="sets"
+          outlined
+          class="form-control"
+          :rules="numericRules"
+          label="Sets"
+          v-model.number="exercise.sets"
+        >
+          <v-icon slot="append" @click="exercise.sets++">
+            mdi-chevron-up
+          </v-icon>
+          <v-icon slot="prepend" @click="exercise.sets--">
+            mdi-chevron-down
+          </v-icon>
         </v-text-field>
         <v-divider />
         <v-card-actions>
@@ -50,7 +106,7 @@
             ><span>Register</span></v-btn
           >
           <v-spacer />
-          <v-btn color="info" type="submit"><span>Sign in</span></v-btn>
+          <v-btn color="info" type="submit"><span>Submit</span></v-btn>
         </v-card-actions>
       </v-form>
     </v-card-text>
@@ -59,38 +115,73 @@
 
 <script>
 import exerciseService from "../services/ExerciseService";
+import focusService from "../services/FocusService";
 
 export default {
   name: "create-exercise",
-  components: {},
+  created() {
+    focusService
+      .getFocuses()
+      .then((response) => {
+        if (response.status === 200) {
+          this.focuses = response.data;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
   data() {
     return {
       exercise: {
-          exerciseName: "",          
-          description: "",
-          focusId: 0,
-          time: 0,
-          userId: 0,
-          weight: null,
-          repetitions: null,
-          sets: null,
-          
+        exerciseName: "",
+        description: "",
+        focusId: null,
+        time: null,
+        userId: this.$store.state.user.userId,
+        weight: null,
+        repetitions: null,
+        sets: null,
       },
       exerciseNameRules: [
         (v) =>
-          (v || "").length <= 50 || `A maximum of 50 characters is allowed`,
-
+          (v || "").length <= 50 || "A maximum of 50 characters is allowed",
       ],
-      
+      numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
+      focusRules: [
+        (v) =>
+          this.focusNames.includes(v) ||
+          "You can only select predefined focuses!",
+      ],
+      focuses: [],
+      pickedFocusName: "",
     };
+  },
+  computed: {
+    focusNames() {
+      return this.focuses.map(
+        (f) => f.focusName.charAt(0).toUpperCase() + f.focusName.slice(1) // Capitalize first letter :p
+      );
+    },
   },
   methods: {
     createExercise() {
-     exerciseService.postExercise(this.exercise).then(response => {
-         if(response.status === 201){
-            this.$router.push({name: "exercises"})
-         }
-         });
+      let arrayWithFocusObj = this.focuses.filter((f) => {
+        console.log(f.focusName, this.pickedFocusName.toLowerCase());
+        return f.focusName === this.pickedFocusName.toLowerCase();
+      });
+      this.exercise.focusId = arrayWithFocusObj[0].focusId; // This should *always* work
+      exerciseService
+        .postExercise(this.exercise)
+        .then((response) => {
+          console.log(response.status);
+          if (response.status === 201) {
+            this.$router.push({ name: "exercises" });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };

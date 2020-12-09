@@ -5,6 +5,8 @@ export default {
     return axios.get(`/user/${name}/trainer/exercise`);
   },
   postExercise: (exercise) => {
-    return axios.post("/exercise", exercise);
-  }
+    let response = axios.post("/exercise", exercise);
+    console.log(response);
+    return response;
+  },
 };
