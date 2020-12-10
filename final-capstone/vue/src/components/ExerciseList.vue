@@ -14,6 +14,14 @@
             <p v-if="e.sets"><b>Sets:</b> {{ e.sets }}</p>
             <p v-if="e.weight"><b>Weight:</b> {{ e.weight }}</p>
           </div>
+          <div class="flex-container flex-center">
+            <v-btn color="primary">
+              <span>Edit</span>
+            </v-btn>
+            <v-btn color="red" dark>
+              <span>Delete</span>
+            </v-btn>
+          </div>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -55,5 +63,13 @@ export default {
 <style scoped>
 .flex-container {
   justify-content: space-evenly;
+}
+
+.flex-center {
+  justify-content: center;
+}
+
+.flex-center >>> * {
+  margin: 0 .5rem;
 }
 </style>
