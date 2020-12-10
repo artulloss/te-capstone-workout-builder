@@ -44,5 +44,26 @@ namespace Capstone.Controllers
             return newExercise != null ? (ActionResult) Created($"/exercise/{newExercise.ExerciseId}", newExercise) : BadRequest();
         }
 
+        [HttpPut]
+        public ActionResult<Exercise> EditExercise(Exercise exercise)
+        {
+            return _exerciseDao.EditExercise(exercise);
+        }
+
+        [HttpDelete]
+        public ActionResult DeleteExercise(Exercise exercise)
+        {
+            int exerciseId = exercise.ExerciseId ?? -1;
+            if (exerciseId == -1 || _exerciseDao.GetExercise(exerciseId) == null)
+            {
+                return BadRequest("Exercise not found.");
+            }
+            if (_exerciseDao.DeleteExercise(exercise))
+            {
+                return StatusCode(204);
+            }
+            return NoContent();
+        }
+
     }
 }
