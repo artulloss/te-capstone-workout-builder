@@ -1,40 +1,59 @@
 <template>
   <div>
-    <div v-for="e in exercises" :key="e.exerciseId">
-      <h3 v-on:click="toggleExerciseVisible(e.exerciseId)">
-        {{ e.exerciseName }} - Time: {{ e.time }} seconds
-      </h3>
-      <!-- <div> -->
-      <div v-if="exerciseVisibility[e.exerciseId]">
-        <p>{{ e.description }}</p>
-      </div>
-    </div>
+    <v-expansion-panels>
+      <v-expansion-panel v-for="e in exercises" :key="e.exerciseId">
+        <v-expansion-panel-header expand-icon="mdi-menu-down">
+          <b>{{ e.exerciseName }}</b>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <p>{{ e.description }}</p>
+          <div class="flex-container">
+            <p><b>Focus:</b> {{ getFocusName(e.focusId) }}</p>
+            <p><b>Time:</b> {{ e.time }}</p>
+            <p v-if="e.repetitions"><b>Repetitions:</b> {{ e.repetitions }}</p>
+            <p v-if="e.sets"><b>Sets:</b> {{ e.sets }}</p>
+            <p v-if="e.weight"><b>Weight:</b> {{ e.weight }}</p>
+          </div>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
-
 export default {
   name: "exercise-list",
-  data() {
-    return {
-      exerciseVisibility: [],
-    };
+  props: {
+    exercises: Array,
+    focuses: Array,
   },
-  methods: {
-    toggleExerciseVisible(exerciseId) {
-      Vue.set(
-        this.exerciseVisibility,
-        exerciseId,
-        !this.exerciseVisibility[exerciseId]
+  computed: {
+    focusNames() {
+      return this.props.focuses.map((f) =>
+        this.capitalizeFirstLetter(f.focusName)
       );
     },
   },
-  props: {
-    exercises: Array,
+  methods: {
+    capitalizeFirstLetter(string) {
+      string = string + "";
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+    getFocusName(id) {
+      console.log("FOCUSES", this.focuses);
+      let arrayWithFocusObj = this.focuses.filter((f) => {
+        return f.focusId === id;
+      });
+      return this.capitalizeFirstLetter(
+        (arrayWithFocusObj[0] || { focusName: undefined }).focusName
+      );
+    },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.flex-container {
+  justify-content: space-evenly;
+}
+</style>

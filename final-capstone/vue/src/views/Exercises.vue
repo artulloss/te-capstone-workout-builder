@@ -1,32 +1,38 @@
 <template>
-  <div>
-    <h1>Manage Exercises</h1>
-    <v-combobox
-      id="focus"
-      outlined
-      class="form-control"
-      :rules="focusRules"
-      label="Focus"
-      :items="focusNames"
-      v-model="focusFilter"
-      clearable
-      validate-on-blur
-    />
-    <v-text-field
-      id="time"
-      suffix="seconds"
-      outlined
-      label="Time"
-      class="form-control"
-      :rules="numericRules"
-      append-outer-icon="mdi-chevron-up"
-      prepend-icon="mdi-chevron-down"
-      @click:append-outer="timeFilter += 10"
-      @click:prepend="timeFilter -= 10"
-      v-model.number="timeFilter"
-    />
-    <exercise-list :exercises="exercises" />
-  </div>
+  <v-card class="container mx-auto mt-5">
+    <v-card-title>
+      <h1 class="display-1">Manage Exercises</h1>
+    </v-card-title>
+    <v-card-text>
+      <v-combobox
+        id="focus"
+        outlined
+        class="form-control"
+        :rules="focusRules"
+        label="Focus"
+        :items="focusNames"
+        v-model="focusFilter"
+        clearable
+        validate-on-blur
+        @change="updateUrl"
+      />
+      <v-text-field
+        id="time"
+        suffix="seconds"
+        outlined
+        label="Time"
+        class="form-control"
+        :rules="numericRules"
+        append-outer-icon="mdi-chevron-up"
+        prepend-icon="mdi-chevron-down"
+        @click:append-outer="updateTimeFilter(10)"
+        @click:prepend="updateTimeFilter(-10)"
+        v-model.number="timeFilter"
+        @change="updateUrl"
+      />
+      <exercise-list :exercises="exercises" :focuses="focuses" />
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -117,8 +123,36 @@ export default {
           console.log(error);
         });
     },
+    getFilter() {
+      const filter = [];
+      if (this.focusFilter) {
+        filter.focus = this.focusFilter;
+      }
+      if (this.timeFilter) {
+        filter.time = this.timeFilter;
+      }
+      return filter;
+    },
+    updateUrl() {
+      window.history.pushState(
+        {},
+        "",
+        "/" + this.$route.name + exerciseService.getQueryRoute(this.getFilter())
+      );
+    },
+    updateTimeFilter(amount) {
+      let newTime;
+      newTime = Number(this.timeFilter) + amount;
+      this.timeFilter = newTime === 0 ? "" : newTime;
+      this.updateUrl();
+    },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+h1 {
+  text-align: center;
+  padding-bottom: 0.5rem;
+}
+</style>

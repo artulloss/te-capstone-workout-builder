@@ -16,12 +16,12 @@
     </div>
 
     <v-spacer></v-spacer>
-    <v-btn v-bind:to="{ name: 'logout' }" text v-if="$store.state.token != ''">
+    <v-btn text v-if="$store.state.token !== ''" @click="logout">
       <span class="mr-2">Logout</span>
       <v-icon>mdi-logout</v-icon>
     </v-btn>
 
-    <v-btn v-bind:to="{ name: 'login' }" text v-else>
+    <v-btn :to="{ name: 'login' }" text v-else>
       <span class="mr-2">Login</span>
       <v-icon>mdi-login</v-icon>
     </v-btn>
@@ -31,6 +31,12 @@
 <script>
 export default {
   name: "nav-bar",
+  methods: {
+    logout() {
+      this.$store.commit("LOGOUT");
+      this.$router.push({ name: "landing" });
+    },
+  },
 };
 </script>
 

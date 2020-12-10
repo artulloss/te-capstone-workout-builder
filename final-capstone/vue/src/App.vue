@@ -22,3 +22,22 @@ export default {
   }),
 };
 </script>
+
+<style>
+.container {
+  padding: 2rem;
+  width: 65%;
+}
+.flex-container {
+  display: flex;
+}
+.alert {
+  margin-bottom: 0.75rem;
+}
+.alert-danger {
+  color: red;
+}
+.alert-success {
+  color: green;
+}
+</style>

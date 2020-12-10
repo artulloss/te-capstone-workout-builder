@@ -1,5 +1,5 @@
 <template>
-  <v-card width="400" class="mx-auto mt-5">
+  <v-card class="container mx-auto mt-5">
     <v-card-title>
       <h1 class="display-1">Create an Exercise</h1>
     </v-card-title>
@@ -49,7 +49,7 @@
           :rules="requiredNumericRules"
           append-outer-icon="mdi-chevron-up"
           prepend-icon="mdi-chevron-down"
-          @click:append-outer="exercise.time += 10"
+          @click:append-outer="exercise.time = Number(exercise.time) + 10"
           @click:prepend="exercise.time -= 10"
         />
         <v-text-field
@@ -102,12 +102,6 @@
     </v-card-text>
   </v-card>
 </template>
-
-<style scoped>
-.alert-danger {
-  color: red;
-}
-</style>
 
 <script>
 import exerciseService from "../services/ExerciseService";

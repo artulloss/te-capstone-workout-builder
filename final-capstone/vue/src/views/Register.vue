@@ -1,12 +1,16 @@
 <template>
-  <v-card width="400" class="mx-auto mt-5">
+  <v-card class="container mx-auto mt-5">
     <v-card-title>
       <h1 class="display-1">Create Account</h1>
     </v-card-title>
     <v-card-text>
       <v-form class="form-signin" @submit.prevent="register">
-        <div class="alert alert-danger" role="alert" v-if="invalidCredentials">
-          Invalid username and password!
+        <div
+          class="alert alert-danger"
+          role="alert"
+          v-if="registrationErrorMsg"
+        >
+          {{ this.registrationErrorMsg }}
         </div>
         <div
           class="alert alert-success"
@@ -50,7 +54,7 @@
           :rules="confirmPasswordRules"
           outlined
           prepend-icon="mdi-lock"
-          v-model="retypePassword"
+          v-model="user.confirmPassword"
           :passwordRules="passwordRules"
           :counter="50"
           :type="show2 ? 'text' : 'password'"
@@ -86,11 +90,9 @@ export default {
         confirmPassword: "",
         role: "user",
       },
-      registrationErrors: false,
-      registrationErrorMsg: "There were problems registering this user.",
+      registrationErrorMsg: undefined,
       show1: false,
       show2: false,
-      retypePassword: "",
       usernameRules: [
         (v) =>
           (v || "").length <= 50 || `A maximum of 50 characters is allowed`,
@@ -99,38 +101,47 @@ export default {
       passwordRules: [() => true],
       confirmPasswordRules: [
         () =>
-          this.user.password === this.retypePassword ||
+          this.user.password === this.user.confirmPassword ||
+          this.user.confirmPassword === "" ||
           "Passwords do not match",
       ],
     };
   },
   methods: {
     register() {
-      if (this.user.password != this.user.confirmPassword) {
-        this.registrationErrors = true;
-        this.registrationErrorMsg = "Passwords do not match."
+      if (!this.user.username) {
+        this.registrationErrorMsg = "You must provide a username";
+      } else if (!this.user.password) {
+        this.registrationErrorMsg = "You must provide a password";
+      } else if (!this.user.confirmPassword) {
+        this.registrationErrorMsg = "You must confirm your password";
+      } else if (this.user.password !== this.user.confirmPassword) {
+        this.registrationErrorMsg = "Passwords do not match";
       } else {
+        this.registrationErrorMsg = undefined;
         authService
           .register(this.user)
           .then((response) => {
-            if (response.status == 201) {
+            if (response.status === 201) {
               this.$router.push({
-                path: "/login",
-                query: { registration: "success" },
+                name: "login",
+                params: { registration: "success" },
               });
             }
           })
           .catch((error) => {
             const response = error.response;
-            this.registrationErrors = true;
-            if (response.status === 400) {
+            if (response.status === 409) {
+              this.registrationErrorMsg = "Bad Request: Account already exists";
+            } else if (response.status > 400 && response.status < 500) {
               this.registrationErrorMsg = "Bad Request: Validation Errors";
+            } else {
+              console.log(response);
             }
           });
       }
     },
     clearErrors() {
-      this.registrationErrors = false;
       this.registrationErrorMsg = "There were problems registering this user.";
     },
   },

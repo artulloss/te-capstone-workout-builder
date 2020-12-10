@@ -1,5 +1,5 @@
 <template>
-  <v-card width="400" class="mx-auto mt-5">
+  <v-card class="container mx-auto mt-5">
     <v-card-title>
       <h1 class="display-1">Login</h1>
     </v-card-title>
@@ -11,7 +11,7 @@
         <div
           class="alert alert-success"
           role="alert"
-          v-if="this.$route.query.registration"
+          v-if="this.$route.params.registration"
         >
           Thank you for registering, please sign in.
         </div>

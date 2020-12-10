@@ -13,7 +13,7 @@
           exciting!
         </p>
         <div class="btn-container flex-container">
-          <v-btn color="blue" :to="{name: 'register'}" dark>
+          <v-btn color="blue" :to="{ name: 'register' }" dark>
             <span> <h2>Get Started</h2> </span>
           </v-btn>
         </div>
@@ -34,7 +34,6 @@ h1 {
 .flex-container {
   height: 100%;
   width: 65%;
-  display: flex;
   justify-content: flex-start;
   flex-direction: column;
   margin: 0 auto;
