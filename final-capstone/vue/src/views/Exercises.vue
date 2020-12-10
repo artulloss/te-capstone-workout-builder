@@ -10,7 +10,7 @@
       :items="focusNames"
       v-model="focusFilter"
       clearable
-      @blur="filter"
+      validate-on-blur
     />
     <v-text-field
       id="time"
@@ -24,7 +24,6 @@
       @click:append-outer="timeFilter += 10"
       @click:prepend="timeFilter -= 10"
       v-model.number="timeFilter"
-      @blur="filter"
     />
     <exercise-list :exercises="exercises" />
   </div>
@@ -39,44 +38,50 @@ export default {
   components: { ExerciseList },
   data() {
     return {
-      exercises: [],
+      internalExercises: [],
       focusFilter: "",
       timeFilter: null,
       focuses: [],
       focusRules: [
         (v) =>
-          this.focusNames.includes(v) ||
           !v ||
+          this.focusNames
+            .map((f) => f.toLowerCase()) // Case insensitive matching
+            .includes(v.toLowerCase()) ||
           "You can only select predefined focuses!",
       ],
       numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
     };
   },
   created() {
-    exerciseService
-      .getTrainerExercise(this.$store.state.user.username)
-      .then((response) => {
-        if (response.status === 200) {
-          console.log(response);
-          this.exercises = response.data;
-        }
-      });
-    focusService
-      .getFocuses()
-      .then((response) => {
-        if (response.status === 200) {
-          this.focuses = response.data;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.getFocuses();
+    this.getExercises(); // Keep it simple and not use the filter params
+    // Next we parse the route query
+    let query = this.$route.query;
+    console.log(query);
+    for (const prop in query) {
+      if (prop === "focus") {
+        this.focusFilter = query[prop];
+      } else if (prop === "time") {
+        this.timeFilter = Number(query[prop]); // Query props are strings
+      }
+    }
   },
   computed: {
     focusNames() {
       return this.focuses.map(
         (f) => f.focusName.charAt(0).toUpperCase() + f.focusName.slice(1) // Capitalize first letter :p
       );
+    },
+    exercises() {
+      return this.internalExercises.filter((exercise) => {
+        return (
+          ((!this.focusFilter && this.focusFilter !== 0) || // 0 is falsey
+            this.getFocusId(this.focusFilter) === exercise.focusId) &&
+          ((!this.timeFilter && this.timeFilter !== 0) || // 0 is falsey
+            this.timeFilter === exercise.time)
+        );
+      });
     },
   },
   methods: {
@@ -86,31 +91,30 @@ export default {
       });
       return (arrayWithFocusObj[0] || { focusId: undefined }).focusId;
     },
-    filter() {
-      const filter = [];
-      console.log(
-        "FocusFilter",
-        this.focusFilter,
-        "TimeFilter",
-        this.timeFilter
-      );
-      console.log("this.focusFilter !== []", this.focusFilter !== []);
-      if (this.focusFilter !== []) {
-        const focusId = this.getFocusId();
-        if (focusId !== undefined) filter.push({ focusId: focusId });
-      }
-      if (this.timeFilter) {
-        filter.push({ time: this.timeFilter });
-      }
-      console.log("Filter", filter);
+    getFocuses() {
+      // Get all the focuses
+      focusService
+        .getFocuses()
+        .then((response) => {
+          if (response.status === 200) {
+            this.focuses = response.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getExercises(filter = {}) {
       exerciseService
         .getTrainerExercise(this.$store.state.user.username, filter)
         .then((response) => {
           console.log(response);
           if (response.status === 200) {
-            console.log(response);
-            this.exercises = response.data;
+            this.internalExercises = response.data;
           }
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
   },

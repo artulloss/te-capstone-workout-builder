@@ -1,10 +1,10 @@
 import axios from "axios";
 
 export default {
-  getTrainerExercise(name, filter = []) {
+  getTrainerExercise(name, filter = {}) {
     let route = `/user/${name}/trainer/exercise`;
     route += this.getQueryRoute(filter);
-    console.log("getQueryRoute",this.getQueryRoute(filter))
+    console.log("getQueryRoute", this.getQueryRoute(filter));
     return axios.get(route);
   },
   postExercise(exercise) {
@@ -12,21 +12,18 @@ export default {
     console.log(response);
     return response;
   },
+  // In {time: 10, focusId: 1} etc
   getQueryRoute(filter) {
-    console.log(filter)
     let query = "";
-    for (const [key, param] of filter.entries()) {
-      if (key === 0) {
-        for (const prop in param) {
-          query += `?${prop}=${param[prop]}`;
-        }
+    let first = true;
+    for (const prop in filter) {
+      if (first) {
+        query += `?${prop}=${filter[prop]}`;
+        first = false;
       } else {
-        for (const prop in param) {
-          query += `&${prop}=${param[prop]}`;
-        }
+        query += `&${prop}=${filter[prop]}`;
       }
     }
-    console.log(query);
     return query;
   },
 };

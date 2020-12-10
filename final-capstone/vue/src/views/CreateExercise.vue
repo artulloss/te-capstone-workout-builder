@@ -146,7 +146,9 @@ export default {
       numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
       focusRules: [
         (v) =>
-          this.focusNames.includes(v) ||
+          this.focusNames
+            .map((f) => f.toLowerCase()) // Case insensitive matching
+            .includes(v.toLowerCase()) ||
           "You can only select predefined focuses!",
       ],
       focuses: [],
