@@ -108,7 +108,7 @@ export default {
     register() {
       if (this.user.password != this.user.confirmPassword) {
         this.registrationErrors = true;
-        this.registrationErrorMsg = "Password & Confirm Password do not match.";
+        this.registrationErrorMsg = "Passwords do not match."
       } else {
         authService
           .register(this.user)
