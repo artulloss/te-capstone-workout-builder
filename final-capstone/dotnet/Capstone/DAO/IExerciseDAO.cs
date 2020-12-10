@@ -8,5 +8,9 @@ namespace Capstone.DAO
         List<Exercise> GetExercises();
         Exercise GetExercise(int id);
         Exercise AddExercise(Exercise exercise);
+
+        Exercise EditExercise(Exercise exercise);
+
+        bool DeleteExercise(Exercise exercise);
     }
 }

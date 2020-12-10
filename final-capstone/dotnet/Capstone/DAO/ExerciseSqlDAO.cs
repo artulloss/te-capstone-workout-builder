@@ -92,6 +92,42 @@ namespace Capstone.DAO
                 return newExercise;
             }
         }
+        public Exercise EditExercise(Exercise exercise)
+        {
+            
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    SqlCommand insertCmd = new SqlCommand(@"UPDATE exercises SET exercise_name = @exercise_name, focus_id=@focus_id, description=@description, weight=@weight, time=@time, repetitions=@repetitions,
+                                                            sets=@sets, user_id=@user_id WHERE exercise_id = @exercise_id", conn);
+                    insertCmd.Parameters.AddWithValue("@exercise_name", exercise.ExerciseName);
+                    insertCmd.Parameters.AddWithValue("@focus_id", exercise.FocusId);
+                    insertCmd.Parameters.AddWithValue("@description", exercise.Description);
+                    insertCmd.Parameters.AddWithValue("@weight", exercise.Weight ?? (object)DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@time", exercise.Time);
+                    insertCmd.Parameters.AddWithValue("@repetitions", exercise.Repetitions ?? (object)DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@sets", exercise.Sets ?? (object)DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@user_id", exercise.UserId);
+                    insertCmd.Parameters.AddWithValue("@exercise_id", exercise.ExerciseId);
+
+                    int numRowsAffected = insertCmd.ExecuteNonQuery();
+                    if (numRowsAffected != 1)
+                    {
+                        throw new Exception("Rows affected was not 1.");
+                    }
+                    return exercise;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return exercise;
+            }
+        }
+
+       
 
         public  static Exercise ReaderToExercise(SqlDataReader reader) 
         {
@@ -107,6 +143,29 @@ namespace Capstone.DAO
                 Sets = (int?) (reader["sets"] != DBNull.Value ? reader["sets"] : null),
                 UserId = Convert.ToInt32(reader["user_id"])
             };
+        }
+
+        public bool DeleteExercise(Exercise exercise)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    SqlCommand insertCmd = new SqlCommand(@"DELETE FROM exercises WHERE exercise_id = @exercise_id", conn);
+                    insertCmd.Parameters.AddWithValue("@exercise_id", exercise.ExerciseId);
+
+                    int numRowsAffected = insertCmd.ExecuteNonQuery();
+                    return (numRowsAffected == 1);
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+           
         }
     }
 }
