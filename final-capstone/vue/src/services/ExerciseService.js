@@ -12,6 +12,11 @@ export default {
     console.log(response);
     return response;
   },
+  updateExercise(exercise) {
+    let response = axios.put(`/exercise/${exercise.exerciseId}`, exercise);
+    console.log(response);
+    return response;
+  },
   // In {time: 10, focusId: 1} etc
   getQueryRoute(filter) {
     let query = "";

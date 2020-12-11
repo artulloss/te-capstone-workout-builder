@@ -3,25 +3,28 @@
     <nav-bar />
     <v-main>
       <router-view />
+
+      <!--<div id="app">
+        <vue-particles color="#dedede"></vue-particles>
+      </div>
+
       <div id="app">
-      <vue-particles color="#dedede"></vue-particles>
-    </div>
-     <div id="app">
-      <vue-particles
-        color="#000000"
-        :particleOpacity="0.2"
-        :particlesNumber="80"
-        shapeType="circle"
-        :particleSize="7"
-        linesColor="#000000"
-        :linesWidth="1"
-        :lineLinked="true"
-        :lineOpacity="1"
-        :linesDistance="150"
-        :moveSpeed="3"
-      >
-      </vue-particles>
-    </div>
+       <vue-particles
+          color="#000000"
+          :particleOpacity="0.2"
+          :particlesNumber="80"
+          shapeType="circle"
+          :particleSize="7"
+          linesColor="#000000"
+          :linesWidth="1"
+          :lineLinked="true"
+          :lineOpacity="1"
+          :linesDistance="150"
+          :moveSpeed="3"
+        >        
+        </vue-particles>
+
+      </div>-->
     </v-main>
   </v-app>
   

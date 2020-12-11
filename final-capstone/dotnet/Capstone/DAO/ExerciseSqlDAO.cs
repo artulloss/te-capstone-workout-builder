@@ -94,7 +94,7 @@ namespace Capstone.DAO
         }
         public Exercise EditExercise(Exercise exercise)
         {
-            
+            Exercise editedExercise = null;
             try
             {
                 using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -117,14 +117,14 @@ namespace Capstone.DAO
                     {
                         throw new Exception("Rows affected was not 1.");
                     }
-                    return exercise;
+                    editedExercise = exercise;
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return exercise;
             }
+            return editedExercise;
         }
 
        

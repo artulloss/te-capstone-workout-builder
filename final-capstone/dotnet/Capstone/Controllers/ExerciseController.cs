@@ -47,7 +47,8 @@ namespace Capstone.Controllers
         [HttpPut]
         public ActionResult<Exercise> EditExercise(Exercise exercise)
         {
-            return _exerciseDao.EditExercise(exercise);
+            Exercise editedExercise = _exerciseDao.EditExercise(exercise);
+            return editedExercise != null ? (ActionResult) Ok(editedExercise) : BadRequest() ;
         }
 
         [HttpDelete]
