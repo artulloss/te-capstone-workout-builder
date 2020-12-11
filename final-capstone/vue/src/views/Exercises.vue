@@ -37,7 +37,7 @@
 
 <script>
 import ExerciseList from "@/components/ExerciseList";
-import focusService from "../services/FocusService";
+import focusService from "@/services/FocusService";
 import exerciseService from "@/services/ExerciseService";
 
 export default {

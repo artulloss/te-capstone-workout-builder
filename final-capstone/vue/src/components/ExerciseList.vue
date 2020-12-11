@@ -6,7 +6,10 @@
           <b>{{ e.exerciseName }}</b>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p :contentEditable="exerciseEditable[e.exerciseId]">
+          <p
+            :id="getDescriptionId(e)"
+            :contentEditable="exerciseEditable[e.exerciseId]"
+          >
             {{ e.description }}
           </p>
           <div class="flex-container">
@@ -18,7 +21,10 @@
           </div>
           <div class="flex-container flex-center">
             <v-btn color="primary" @click="editExercise(e)">
-              <span>{{exerciseEditable[e.exerciseId] ? "Save" : "Edit"}}</span> <!--change color maybe?-->
+              <span>{{
+                exerciseEditable[e.exerciseId] ? "Save" : "Edit"
+              }}</span>
+              <!--change color maybe?-->
             </v-btn>
             <v-btn color="red" dark>
               <span>Delete</span>
@@ -32,13 +38,14 @@
 
 <script>
 import Vue from "vue";
+//import exerciseService from "@/services/ExerciseService";
 
 export default {
   name: "exercise-list",
   data() {
     return {
       exerciseEditable: [],
-    }
+    };
   },
   props: {
     exercises: Array,
@@ -65,21 +72,29 @@ export default {
         (arrayWithFocusObj[0] || { focusName: undefined }).focusName
       );
     },
+
     editExercise(exercise) {
+      console.log(document.getElementById(this.getDescriptionId(exercise)));
       this.toggleExerciseVisible(exercise.exerciseId);
-      if(!this.exerciseEditable[exercise.exerciseId]){
-        //save
+      if (!this.exerciseEditable[exercise.exerciseId]) {
+        console.log("Adam");
+        //exerciseService.updateExercise(exercise);
       }
 
       return exercise;
     },
+
+    getDescriptionId(exercise) {
+      return "description-" + exercise.exerciseId;
+    },
+
     toggleExerciseVisible(exerciseId) {
       Vue.set(
         this.exerciseEditable,
         exerciseId,
         !this.exerciseEditable[exerciseId]
       );
-    }
+    },
   },
 };
 </script>

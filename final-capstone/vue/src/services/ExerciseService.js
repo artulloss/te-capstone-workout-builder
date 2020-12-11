@@ -13,7 +13,7 @@ export default {
     return response;
   },
   updateExercise(exercise) {
-    let response = axios.put(`/exercise/${exercise.exerciseId}`, exercise);
+    let response = axios.put("/exercise", exercise);
     console.log(response);
     return response;
   },

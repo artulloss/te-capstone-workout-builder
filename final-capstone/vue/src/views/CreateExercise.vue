@@ -104,8 +104,8 @@
 </template>
 
 <script>
-import exerciseService from "../services/ExerciseService";
-import focusService from "../services/FocusService";
+import exerciseService from "@/services/ExerciseService";
+import focusService from "@/services/FocusService";
 
 export default {
   name: "create-exercise",
