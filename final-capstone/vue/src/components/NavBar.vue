@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="purple" dark>
+  <v-app-bar app dark>
     <div class="d-flex align-center">
       <router-link :to="{ name: 'landing' }">
         <v-img
