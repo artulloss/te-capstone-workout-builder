@@ -6,7 +6,9 @@
           <b>{{ e.exerciseName }}</b>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p :id="getDescriptionId(e.exerciseId)"> {{ e.description }}</p>
+          <p contentEditable="">
+            {{ e.description }}
+          </p>
           <div class="flex-container">
             <p><b>Focus:</b> {{ getFocusName(e.focusId) }}</p>
             <p><b>Time:</b> {{ e.time }}</p>
@@ -56,12 +58,9 @@ export default {
         (arrayWithFocusObj[0] || { focusName: undefined }).focusName
       );
     },
-    editExercise(exercise){
+    editExercise(exercise) {
       return exercise;
     },
-    getDescriptionId(exerciseId){
-      return "description-" + exerciseId;
-    }
   },
 };
 </script>
@@ -76,6 +75,6 @@ export default {
 }
 
 .flex-center >>> * {
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
 }
 </style>
