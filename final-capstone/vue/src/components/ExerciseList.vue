@@ -9,26 +9,56 @@
           <p>
             {{ e.description }}
           </p>
-          <div class="flex-container">
-            <ul>
-              <li>
-                <b>Focus: </b>
-                <p>{{ getFocusName(e.focusId) }}</p>
-              </li>
-            </ul>
-            <ul>
-              <li>
-                <b>Focus: </b>
-                <p>{{ getFocusName(e.focusId) }}</p>
-              </li>
-            </ul>
-            <ul>
-              <li>
-                <b>Focus: </b>
-                <p>{{ getFocusName(e.focusId) }}</p>
-              </li>
-            </ul>
-          </div>
+          <ul class="flex-container">
+            <li>
+              <b>Focus: </b>
+              <p
+                :class="getExerciseClass(e)"
+                :contentEditable="exerciseEditable[e.exerciseId]"
+              >
+                {{ getFocusName(e.focusId) }}
+              </p>
+            </li>
+            <li>
+              <b>Time: </b>
+              <p
+                :class="getExerciseClass(e)"
+                :contentEditable="exerciseEditable[e.exerciseId]"
+              >
+                {{ e.time }}
+              </p>
+            </li>
+            <li>
+              <b>Repetitions: </b>
+              <p
+                v-if="e.repetitions !== null"
+                :class="getExerciseClass(e)"
+                :contentEditable="exerciseEditable[e.exerciseId]"
+              >
+                {{ e.repetitions }}
+              </p>
+            </li>
+            <li>
+              <b>Sets: </b>
+              <p
+                v-if="e.repetitions !== null"
+                :class="getExerciseClass(e)"
+                :contentEditable="exerciseEditable[e.exerciseId]"
+              >
+                {{ e.sets }}
+              </p>
+            </li>
+            <li>
+              <b>Weight: </b>
+              <p
+                v-if="e.repetitions !== null"
+                :class="getExerciseClass(e)"
+                :contentEditable="exerciseEditable[e.exerciseId]"
+              >
+                {{ e.weight }}
+              </p>
+            </li>
+          </ul>
           <div class="flex-container flex-center">
             <v-btn color="primary" @click="editExercise(e)">
               <span>{{
@@ -128,10 +158,13 @@ li {
 
 ul {
   padding: 1rem 0;
-  display: inline;
 }
 
 p {
   display: inline;
+}
+
+p[contentEditable] {
+  font-size: 30;
 }
 </style>

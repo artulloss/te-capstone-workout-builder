@@ -1,23 +1,29 @@
 <template>
   <v-container fluid>
     <div class="main-container">
-      <h1>Fitness Elevator</h1>
-      <div class="flex-container">
-        <p>
-          Do you enjoy exercise but struggle to come up with your own workout
-          plan on your own? Do your workouts get boring from doing the same 5
-          exercises over and over every day? Then this is the app for you.
-          Trainers will be able to input exercises for cardio, legs, arms, abs,
-          and back. Users will be able to login, select their focus and and
-          generate a random workout routine. Exercise has never been so
-          exciting!
-        </p>
-        <div class="btn-container flex-container">
-          <v-btn color="blue" :to="{ name: 'register' }" dark>
-            <span> <h2>Get Started</h2> </span>
-          </v-btn>
+      <v-card class="container mx-auto mt-5">
+        <h1>Fitness Elevator</h1>
+
+        <div class="flex-container">
+          <v-card-text>
+            <p>
+              Do you enjoy exercise but struggle to come up with your own
+              workout plan on your own? Do your workouts get boring from doing
+              the same 5 exercises over and over every day? Then this is the app
+              for you. Trainers will be able to input exercises for cardio,
+              legs, arms, abs, and back. Users will be able to login, select
+              their focus and and generate a random workout routine. Exercise
+              has never been so exciting!
+            </p>
+          </v-card-text>
+
+          <div class="btn-container flex-container">
+            <v-btn color="blue" :to="{ name: 'register' }" dark>
+              <span> <h2>Get Started</h2> </span>
+            </v-btn>
+          </div>
         </div>
-      </div>
+      </v-card>
     </div>
   </v-container>
 </template>
@@ -33,7 +39,6 @@ h1 {
 }
 .flex-container {
   height: 100%;
-  width: 65%;
   justify-content: flex-start;
   flex-direction: column;
   margin: 0 auto;
@@ -44,5 +49,8 @@ h1 {
 }
 .main-container {
   padding: 5rem 2rem;
+}
+h1 {
+  font-size: 2.5rem;
 }
 </style>

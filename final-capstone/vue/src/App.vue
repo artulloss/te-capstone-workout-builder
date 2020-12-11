@@ -3,46 +3,26 @@
     <nav-bar />
     <v-main>
       <router-view />
-
-      <!--<div id="app">
-        <vue-particles color="#dedede"></vue-particles>
-      </div>
-
-      <div id="app">
-       <vue-particles
-          color="#000000"
-          :particleOpacity="0.2"
-          :particlesNumber="80"
-          shapeType="circle"
-          :particleSize="7"
-          linesColor="#000000"
-          :linesWidth="1"
-          :lineLinked="true"
-          :lineOpacity="1"
-          :linesDistance="150"
-          :moveSpeed="3"
-        >        
-        </vue-particles>
-
-      </div>-->
+      <particles-bg
+        type="circle"
+        :canvas="{ backgroundColor: '#888' }"
+        :bg="true"
+      />
     </v-main>
   </v-app>
-  
 </template>
 
 <script>
 import NavBar from "@/components/NavBar.vue";
+import { ParticlesBg } from "particles-bg-vue";
 
 export default {
   name: "App",
 
   components: {
     NavBar,
+    ParticlesBg,
   },
-
-  data: () => ({
-    //
-  }),
 };
 </script>
 
@@ -62,5 +42,8 @@ export default {
 }
 .alert-success {
   color: green;
+}
+.v-main {
+  z-index: 1;
 }
 </style>
