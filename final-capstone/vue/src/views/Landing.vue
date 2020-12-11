@@ -48,7 +48,7 @@ h1 {
   width: fit-content;
 }
 .main-container {
-  padding: 5rem 2rem;
+  padding: 2rem 2rem;
 }
 h1 {
   font-size: 2.5rem;

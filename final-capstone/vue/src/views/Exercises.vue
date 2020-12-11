@@ -1,5 +1,5 @@
 <template>
-  <h1>Hello User, this is Exercises</h1>
+  <h1>My Exercises</h1>
 </template>
 
 <script>

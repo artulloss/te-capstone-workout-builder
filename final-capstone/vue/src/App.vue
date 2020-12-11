@@ -5,9 +5,9 @@
       <router-view />
       <particles-bg
         type="circle"
-        :canvas="{ backgroundColor: '#888' }"
-        :bg="true"
-      />
+        :canvas="{ backgroundColor: '#888' }"        
+        :bg="true"        
+      /> 
     </v-main>
   </v-app>
 </template>
