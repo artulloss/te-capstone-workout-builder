@@ -1,13 +1,14 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "../views/Home.vue";
-import Login from "../views/Login.vue";
-import Logout from "../views/Logout.vue";
-import Exercises from "../views/Exercises.vue";
-import Register from "../views/Register.vue";
-import store from "../store/index";
-import Landing from "../views/Landing.vue";
-import CreateExercise from "../views/CreateExercise.vue"
+import Home from "@/views/Home.vue";
+import Login from "@/views/Login.vue";
+import Logout from "@/views/Logout.vue";
+import Exercises from "@/views/Exercises.vue";
+import AdminExercises from "@/views/AdminExercises.vue";
+import Register from "@/views/Register.vue";
+import store from "@/store/index";
+import Landing from "@/views/Landing.vue";
+import CreateExercise from "@/views/CreateExercise.vue";
 
 Vue.use(Router);
 
@@ -65,6 +66,15 @@ const router = new Router({
       },
     },
     {
+      path: "/admin-exercises",
+      name: "admin-exercises",
+      component: AdminExercises,
+      meta: {
+        requiresAuth: true,
+        admin: true,
+      },
+    },
+    {
       path: "/exercises",
       name: "exercises",
       component: Exercises,
@@ -79,17 +89,20 @@ const router = new Router({
       meta: {
         requiresAuth: true,
       },
-    }
+    },
   ],
 });
 
 router.beforeEach((to, from, next) => {
   // Determine if the route requires Authentication
   const requiresAuth = to.matched.some((x) => x.meta.requiresAuth);
-
+  console.log(to);
+  const admin = to.matched.some((x) => x.meta["admin"]);
   // If it does and they are not logged in, send the user to "/login"
   if (requiresAuth && store.state.token === "") {
     next("/login");
+  } else if (admin && store.state.user.role !== "admin") {
+    next(false);
   } else {
     // Else let them go to their next destination
     next();

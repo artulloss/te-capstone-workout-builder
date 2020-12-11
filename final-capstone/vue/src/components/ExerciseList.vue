@@ -6,18 +6,28 @@
           <b>{{ e.exerciseName }}</b>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p
-            :id="getDescriptionId(e)"
-            :contentEditable="exerciseEditable[e.exerciseId]"
-          >
+          <p>
             {{ e.description }}
           </p>
           <div class="flex-container">
-            <p><b>Focus:</b> {{ getFocusName(e.focusId) }}</p>
-            <p><b>Time:</b> {{ e.time }}</p>
-            <p v-if="e.repetitions"><b>Repetitions:</b> {{ e.repetitions }}</p>
-            <p v-if="e.sets"><b>Sets:</b> {{ e.sets }}</p>
-            <p v-if="e.weight"><b>Weight:</b> {{ e.weight }}</p>
+            <ul>
+              <li>
+                <b>Focus: </b>
+                <p>{{ getFocusName(e.focusId) }}</p>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <b>Focus: </b>
+                <p>{{ getFocusName(e.focusId) }}</p>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <b>Focus: </b>
+                <p>{{ getFocusName(e.focusId) }}</p>
+              </li>
+            </ul>
           </div>
           <div class="flex-container flex-center">
             <v-btn color="primary" @click="editExercise(e)">
@@ -74,7 +84,7 @@ export default {
     },
 
     editExercise(exercise) {
-      console.log(document.getElementById(this.getDescriptionId(exercise)));
+      console.log(document.querySelectorAll(this.getExerciseClass(exercise)));
       this.toggleExerciseVisible(exercise.exerciseId);
       if (!this.exerciseEditable[exercise.exerciseId]) {
         console.log("Adam");
@@ -84,8 +94,8 @@ export default {
       return exercise;
     },
 
-    getDescriptionId(exercise) {
-      return "description-" + exercise.exerciseId;
+    getExerciseClass(exercise) {
+      return "exercise-" + exercise.exerciseId;
     },
 
     toggleExerciseVisible(exerciseId) {
@@ -110,5 +120,18 @@ export default {
 
 .flex-center >>> * {
   margin: 0 0.5rem;
+}
+
+li {
+  list-style: none;
+}
+
+ul {
+  padding: 1rem 0;
+  display: inline;
+}
+
+p {
+  display: inline;
 }
 </style>

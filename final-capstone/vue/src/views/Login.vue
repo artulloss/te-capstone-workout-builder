@@ -85,8 +85,14 @@ export default {
         .then((response) => {
           if (response.status == 200) {
             this.$store.commit("SET_AUTH_TOKEN", response.data.token);
-            this.$store.commit("SET_USER", response.data.user);
-            this.$router.push("/");
+            const user = response.data.user;
+            this.$store.commit("SET_USER", user);
+            console.log("GOT HERE");
+            if (user.role === "admin") {
+              this.$router.push({ name: "admin-exercises" });
+              return;
+            }
+            this.$router.push({ name: "exercises" });
           }
         })
         .catch((error) => {
