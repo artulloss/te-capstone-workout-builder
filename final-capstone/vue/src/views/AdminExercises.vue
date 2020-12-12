@@ -45,7 +45,7 @@ import ExerciseList from "@/components/ExerciseList";
 import focusService from "@/services/FocusService";
 import exerciseService from "@/services/ExerciseService";
 
-// The particles stretch to fix the canvas size on resiz, we recall it when the page size changes
+// The particles stretch to fix the canvas size on resize, we recall it when the page size changes
 const fixParticles = (newData, oldData) => {
   setTimeout(() => {
     if (newData === oldData) return;
