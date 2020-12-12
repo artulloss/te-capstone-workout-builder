@@ -123,8 +123,8 @@ export default {
       return exercise;
     },
 
-    getExerciseClass(exercise) {
-      return "exercise-" + exercise.exerciseId;
+    getExerciseClass({ exerciseId }) {
+      return "exercise-" + exerciseId;
     },
 
     toggleExerciseVisible(exerciseId) {
