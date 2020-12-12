@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Capstone.DAO;
 using Capstone.Models;
@@ -52,13 +53,13 @@ namespace Capstone.Controllers
         }
 
         [HttpDelete ("{id}")]
-        public ActionResult DeleteExercise(int exerciseId)
+        public ActionResult DeleteExercise(int id)
         {
-            if (_exerciseDao.GetExercise(exerciseId) == null)
+            if (_exerciseDao.GetExercise(id) == null)
             {
                 return BadRequest("Exercise not found.");
             }
-            if (_exerciseDao.DeleteExercise(exerciseId))
+            if (_exerciseDao.DeleteExercise(id))
             {
                 return NoContent();
             }

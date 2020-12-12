@@ -49,7 +49,6 @@ namespace Capstone.DAO
                     {
                         return ReaderToExercise(reader);
                     }
-        
                 }
             }
             catch (Exception e)

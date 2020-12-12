@@ -123,12 +123,13 @@ export default {
       return exercise;
     },
 
-    deleteExercise(exercise) {
+    deleteExercise({ exerciseName, exerciseId }) {
+      if (!confirm(`Are you sure you want to delete ${exerciseName}`)) return;
       const newExercises = this.exercises.filter((e) => {
-        return exercise.exerciseId !== e.exerciseId;
+        return exerciseId !== e.exerciseId;
       });
       this.$emit("delete-exercise", newExercises);
-      exerciseService.deleteExercise(exercise);
+      exerciseService.deleteExercise(exerciseId);
     },
 
     getExerciseClass({ exerciseId }) {

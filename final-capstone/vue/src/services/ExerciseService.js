@@ -17,8 +17,8 @@ export default {
     console.log(response);
     return response;
   },
-  deleteExercise(exercise) {
-    let response = axios.delete(`/exercise/${exercise.exerciseId}`, exercise);
+  deleteExercise(exerciseId) {
+    let response = axios.delete(`/exercise/${exerciseId}`);
     console.log(response);
     return response;
   },
