@@ -1,11 +1,14 @@
 import axios from "axios";
 
 export default {
-  getTrainerExercise(name, filter = {}) {
+  getTrainerExercises(name, filter = {}) {
     let route = `/user/${name}/trainer/exercise`;
     route += this.getQueryRoute(filter);
     console.log("getQueryRoute", this.getQueryRoute(filter));
     return axios.get(route);
+  },
+  getUserExercises(username) {
+    return axios.get(`/user/${username}/exercise`);
   },
   postExercise(exercise) {
     let response = axios.post("/exercise", exercise);

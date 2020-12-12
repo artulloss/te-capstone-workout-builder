@@ -28,11 +28,10 @@
           label="Description"
           required
         ></v-textarea>
-        <v-combobox
+        <v-select
           id="focus"
           outlined
           class="form-control"
-          :rules="focusRules"
           label="Focus"
           :items="focusNames"
           v-model="pickedFocusName"
@@ -138,13 +137,7 @@ export default {
           (v || "").length <= 50 || "A maximum of 50 characters is allowed",
       ],
       numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
-      focusRules: [
-        (v) =>
-          this.focusNames
-            .map((f) => f.toLowerCase()) // Case insensitive matching
-            .includes(v.toLowerCase()) ||
-          "You can only select predefined focuses!",
-      ],
+
       focuses: [],
       pickedFocusName: "",
       errorMessage: "",
