@@ -136,7 +136,7 @@ export default {
     },
     getExercises(filter = {}) {
       exerciseService
-        .getTrainerExercise(this.$store.state.user.username, filter)
+        .getTrainerExercises(this.$store.state.user.username, filter)
         .then((response) => {
           console.log(response);
           if (response.status === 200) {

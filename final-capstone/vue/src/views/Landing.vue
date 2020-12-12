@@ -18,8 +18,33 @@
           </v-card-text>
 
           <div class="btn-container flex-container">
-            <v-btn color="blue" :to="{ name: 'register' }" dark>
+            <v-btn
+              v-if="$store.state.token === ''"
+              color="blue"
+              :to="{ name: 'register' }"
+              dark
+            >
               <span> <h2>Get Started</h2> </span>
+            </v-btn>
+            <v-btn
+              v-if="
+                $store.state.token !== '' && $store.state.user.role == 'admin'
+              "
+              color="blue"
+              :to="{ name: 'admin-exercises' }"
+              dark
+            >
+              <span> <h2>Manage Exercises</h2> </span>
+            </v-btn>
+            <v-btn
+              v-if="
+                $store.state.token !== '' && $store.state.user.role == 'user'
+              "
+              color="blue"
+              :to="{ name: 'exercises' }"
+              dark
+            >
+              <span> <h2>My Exercises</h2> </span>
             </v-btn>
           </div>
         </div>
