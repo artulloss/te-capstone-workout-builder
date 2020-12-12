@@ -91,9 +91,6 @@
         <p id="error-msg"></p>
         <v-divider />
         <v-card-actions>
-          <v-btn color="success" :to="{ name: 'register' }"
-            ><span>Register</span></v-btn
-          >
           <v-spacer />
           <v-btn color="info" type="submit"><span>Submit</span></v-btn>
         </v-card-actions>
@@ -188,7 +185,7 @@ export default {
         .then((response) => {
           console.log(response.status);
           if (response.status === 201) {
-            this.$router.push({ name: "exercises" });
+            this.$router.push({ name: "admin-exercises" });
           }
         })
         .catch((error) => {
