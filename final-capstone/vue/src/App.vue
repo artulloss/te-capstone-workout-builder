@@ -4,7 +4,7 @@
     <v-main>
       <router-view />
       <particles-bg
-        type="lines"
+        type="circle"
         :canvas="{ backgroundColor: '#888' }"
         :bg="true"
       />

@@ -2,6 +2,7 @@
 using System.Linq;
 using Capstone.DAO;
 using Capstone.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Capstone.Controllers
@@ -15,15 +16,11 @@ namespace Capstone.Controllers
         public UserController(IUserDAO userDao) {
             _userDao = userDao;
         }
-        
-        [HttpGet] // TODO Remove or add auth
-        public List<User> GetUsers() {
-            return _userDao.GetUsers();
-        }
 
-        [HttpGet("{username}")] // TODO Remove or add auth
-        public User GetUserByUsername(string username) {
-            return _userDao.GetUser(username);
+        [Authorize]
+        [HttpGet]
+        public User GetUserByToken() {
+            return _userDao.GetUser(User.Identity.Name);
         }
 
         [HttpGet("{username}/exercise")]

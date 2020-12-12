@@ -6,7 +6,7 @@
     <v-card-text>
       <v-form class="form-signin" @submit.prevent="login">
         <div class="alert alert-danger" role="alert" v-if="invalidCredentials">
-          Invalid username and password!
+          Invalid username or password!
         </div>
         <div
           class="alert alert-success"
