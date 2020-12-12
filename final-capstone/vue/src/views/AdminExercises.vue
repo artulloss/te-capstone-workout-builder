@@ -9,16 +9,14 @@
       </div>
     </v-card-title>
     <v-card-text>
-      <v-combobox
+      <v-select
         id="focus"
         outlined
         class="form-control"
-        :rules="focusRules"
         label="Focus"
         :items="focusNames"
         v-model="focusFilter"
         clearable
-        validate-on-blur
         @change="updateUrl"
       />
       <v-text-field
@@ -67,14 +65,6 @@ export default {
       focusFilter: "",
       timeFilter: null,
       focuses: [],
-      focusRules: [
-        (v) =>
-          !v ||
-          this.focusNames
-            .map((f) => f.toLowerCase()) // Case insensitive matching
-            .includes(v.toLowerCase()) ||
-          "You can only select predefined focuses!",
-      ],
       numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
     };
   },

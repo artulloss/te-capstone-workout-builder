@@ -27,9 +27,10 @@ namespace Capstone.Controllers
         public List<Exercise> GetUserExercises(string username) {
             return _userDao.GetUserExercises(username);
         }
-        
+
         [HttpGet("{username}/trainer/exercise")]
-        public List<Exercise> GetTrainerExercises(string username, int? focusId = null, int? time = null) {
+        public List<Exercise> GetTrainerExercises(string username, int? focusId = null, int? time = null)
+        {
             return _userDao.GetTrainerExercises(username).Where(e => // Arrow function using Linq
             {
                 // If default (focusId == null) then it will be true to match, but if something is provided it will

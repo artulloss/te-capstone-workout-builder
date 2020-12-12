@@ -3,7 +3,7 @@
     <v-card-title>
       <div class="flex-container">
         <h1 class="display-1">My Exercises</h1>
-        <v-btn :to="{ name: 'create-exercise' }" color="primary"
+        <v-btn :to="{ name: 'generate-workout' }" color="primary"
           >Generate Workout</v-btn
         >
       </div>
@@ -126,7 +126,9 @@ export default {
 
 <style scoped>
 .flex-container {
-  justify-content: space-evenly;
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .flex-center {

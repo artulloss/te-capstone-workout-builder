@@ -9,6 +9,7 @@ import Register from "@/views/Register.vue";
 import store from "@/store/index";
 import Landing from "@/views/Landing.vue";
 import CreateExercise from "@/views/CreateExercise.vue";
+import GenerateWorkout from "@/views/GenerateWorkout.vue";
 
 Vue.use(Router);
 
@@ -90,6 +91,14 @@ const router = new Router({
         requiresAuth: true,
       },
     },
+    {
+      path: "/generate-workout",
+      name: "generate-workout",
+      component: GenerateWorkout,
+      meta: {
+        requiresAuth: true,
+      },
+    }
   ],
 });
 
