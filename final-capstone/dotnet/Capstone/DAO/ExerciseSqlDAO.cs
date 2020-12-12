@@ -38,21 +38,26 @@ namespace Capstone.DAO
         }
 
         public Exercise GetExercise(int id) {
+            
             try {
                 using (SqlConnection conn = new SqlConnection(_connectionString)) {
                     conn.Open();
                     SqlCommand cmd = new SqlCommand("SELECT * FROM exercises WHERE exercise_id = @exercise_id", conn);
                     cmd.Parameters.AddWithValue("@exercise_id", id);
                     SqlDataReader reader = cmd.ExecuteReader();
-                    reader.Read();
-                    return ReaderToExercise(reader);
+                    while (reader.Read())
+                    {
+                        return ReaderToExercise(reader);
+                    }
+        
                 }
             }
-            catch (SqlException e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
-            } 
+               
+            }
+            return null;
         }
 
         public Exercise AddExercise(Exercise exercise)
@@ -145,7 +150,7 @@ namespace Capstone.DAO
             };
         }
 
-        public bool DeleteExercise(Exercise exercise)
+        public bool DeleteExercise(int exerciseId)
         {
             try
             {
@@ -153,7 +158,7 @@ namespace Capstone.DAO
                 {
                     conn.Open();
                     SqlCommand insertCmd = new SqlCommand(@"DELETE FROM exercises WHERE exercise_id = @exercise_id", conn);
-                    insertCmd.Parameters.AddWithValue("@exercise_id", exercise.ExerciseId);
+                    insertCmd.Parameters.AddWithValue("@exercise_id", exerciseId);
 
                     int numRowsAffected = insertCmd.ExecuteNonQuery();
                     return (numRowsAffected == 1);
@@ -163,7 +168,7 @@ namespace Capstone.DAO
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                return false;
             }
            
         }

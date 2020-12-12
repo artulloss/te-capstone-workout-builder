@@ -17,6 +17,12 @@ export default {
     console.log(response);
     return response;
   },
+  deleteExercise(exercise) {
+    let response = axios.delete(`/exercise/${exercise.exerciseId}`, exercise);
+    console.log(response);
+    return response;
+  },
+
   // In {time: 10, focusId: 1} etc
   getQueryRoute(filter) {
     let query = "";

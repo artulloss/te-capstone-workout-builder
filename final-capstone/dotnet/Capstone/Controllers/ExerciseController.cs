@@ -51,19 +51,18 @@ namespace Capstone.Controllers
             return editedExercise != null ? (ActionResult) Ok(editedExercise) : BadRequest() ;
         }
 
-        [HttpDelete]
-        public ActionResult DeleteExercise(Exercise exercise)
+        [HttpDelete ("{id}")]
+        public ActionResult DeleteExercise(int exerciseId)
         {
-            int exerciseId = exercise.ExerciseId ?? -1;
-            if (exerciseId == -1 || _exerciseDao.GetExercise(exerciseId) == null)
+            if (_exerciseDao.GetExercise(exerciseId) == null)
             {
                 return BadRequest("Exercise not found.");
             }
-            if (_exerciseDao.DeleteExercise(exercise))
+            if (_exerciseDao.DeleteExercise(exerciseId))
             {
-                return StatusCode(204);
+                return NoContent();
             }
-            return NoContent();
+            return StatusCode(500);
         }
 
     }

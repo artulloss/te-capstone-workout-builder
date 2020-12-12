@@ -11,6 +11,6 @@ namespace Capstone.DAO
 
         Exercise EditExercise(Exercise exercise);
 
-        bool DeleteExercise(Exercise exercise);
+        bool DeleteExercise(int exerciseId);
     }
 }

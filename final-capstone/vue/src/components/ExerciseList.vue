@@ -66,7 +66,7 @@
               }}</span>
               <!--change color maybe?-->
             </v-btn>
-            <v-btn color="red" dark>
+            <v-btn color="red" dark @click="deleteExercise(e)">
               <span>Delete</span>
             </v-btn>
           </div>
@@ -78,7 +78,7 @@
 
 <script>
 import Vue from "vue";
-//import exerciseService from "@/services/ExerciseService";
+import exerciseService from "@/services/ExerciseService";
 
 export default {
   name: "exercise-list",
@@ -121,6 +121,14 @@ export default {
       }
 
       return exercise;
+    },
+
+    deleteExercise(exercise) {
+      const newExercises = this.exercises.filter((e) => {
+        return exercise.exerciseId !== e.exerciseId;
+      });
+      this.$emit("delete-exercise", newExercises);
+      exerciseService.deleteExercise(exercise);
     },
 
     getExerciseClass({ exerciseId }) {

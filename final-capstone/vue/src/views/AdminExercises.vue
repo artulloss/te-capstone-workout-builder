@@ -35,7 +35,11 @@
         v-model.number="timeFilter"
         @change="updateUrl"
       />
-      <exercise-list :exercises="exercises" :focuses="focuses" />
+      <exercise-list
+        :exercises="exercises"
+        :focuses="focuses"
+        @delete-exercise="internalExercises = $event"
+      />
     </v-card-text>
   </v-card>
 </template>
@@ -116,6 +120,7 @@ export default {
       });
       return (arrayWithFocusObj[0] || { focusId: undefined }).focusId;
     },
+
     getFocuses() {
       // Get all the focuses
       focusService
