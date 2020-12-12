@@ -53,6 +53,9 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
+      <p v-if="!exercises.length" > 
+        This is where your workouts will show up.
+      </p>
     </v-card-text>
   </v-card>
 </template>

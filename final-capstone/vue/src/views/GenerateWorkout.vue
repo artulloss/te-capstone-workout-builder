@@ -35,11 +35,19 @@
         :rules="numericRules"
         append-outer-icon="mdi-chevron-up"
         prepend-icon="mdi-chevron-down"
-        @click:append-outer="updateTimeFilter(10)"
-        @click:prepend="updateTimeFilter(-10)"
-        v-model.number="timeFilter"
+        @click:append-outer="updateselectTime(10)"
+        @click:prepend="updateselectTime(-10)"
+        v-model.number="selectTime"
       />
     </v-card-text>
+    <v-divider />
+        <v-card-actions>
+          <v-btn color="success" @click="feelingLucky"
+            ><span>I'm Feeling Lucky</span></v-btn
+          >
+          <v-spacer />
+          <v-btn color="info" type="submit"><span>Generate</span></v-btn>
+        </v-card-actions>
   </v-card>
 </template>
 
@@ -51,11 +59,11 @@ import axios from "axios";
 export default {
   data() {
     return {
-      selectedFocuses: [],
-      timeFilter: null,
-      focuses: [],
-      trainers: [],
       selectedTrainers: [],
+      selectedFocuses: [],
+      selectTime: null,
+      trainers: [],
+      focuses: [], 
       numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
     };
   },
@@ -72,6 +80,23 @@ export default {
     //this.getExercises();
   },
   methods: {
+    feelingLucky(){
+      const randomNumber = (max) => Math.floor(Math.random() * max);
+      const randomArrayValues = (array) => {
+        const arrayValues = []
+        for(let i = 0; i < randomNumber(array.length); i++){
+          const index = randomNumber(array.length);
+          arrayValues.push(array[index]);
+          array = array.slice(index, index);
+        }
+        return arrayValues;
+      }
+      
+      console.log(this.trainers, this.focuses)
+      this.selectedTrainers = randomArrayValues(this.trainers);
+      this.selectedFocuses = randomArrayValues(this.focuses);
+      console.log(this.selectedTrainers, this.selectedFocuses)
+    },
     getFocusId() {
       let arrayWithFocusObj = this.focuses.filter((f) => {
         return f.focusName === (this.focusFilter || "").toLowerCase();
@@ -117,10 +142,10 @@ export default {
           console.log(error);
         });
     },
-    updateTimeFilter(amount) {
+    updateselectTime(amount) {
       let newTime;
-      newTime = Number(this.timeFilter) + amount;
-      this.timeFilter = newTime === 0 ? "" : newTime;
+      newTime = Number(this.selectTime) + amount;
+      this.selectTime = newTime === 0 ? "" : newTime;
       this.updateUrl();
     },
   },
