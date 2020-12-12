@@ -45,6 +45,16 @@ import ExerciseList from "@/components/ExerciseList";
 import focusService from "@/services/FocusService";
 import exerciseService from "@/services/ExerciseService";
 
+// The particles stretch to fix the canvas size on resiz, we recall it when the page size changes
+const fixParticles = (newData, oldData) => {
+  setTimeout(() => {
+    if (newData === oldData) return;
+    let event = document.createEvent("UIEvents");
+    event.initUIEvent("resize", true, false, window, 0);
+    window.dispatchEvent(event);
+  }, 200); // 200ms delay
+};
+
 export default {
   components: { ExerciseList },
   data() {
@@ -95,6 +105,10 @@ export default {
       });
     },
   },
+  watch: {
+    focusFilter: fixParticles,
+    timeFilter: fixParticles,
+  },
   methods: {
     getFocusId() {
       let arrayWithFocusObj = this.focuses.filter((f) => {
@@ -122,6 +136,7 @@ export default {
           console.log(response);
           if (response.status === 200) {
             this.internalExercises = response.data;
+            fixParticles();
           }
         })
         .catch((error) => {

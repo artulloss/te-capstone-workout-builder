@@ -12,7 +12,7 @@
         />
       </router-link>
 
-      <h2>Fitness Elevator</h2>
+      <h3>Fitness Elevator</h3>
     </div>
 
     <v-spacer></v-spacer>

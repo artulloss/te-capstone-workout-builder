@@ -104,7 +104,6 @@ export default {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
     getFocusName(id) {
-      console.log("FOCUSES", this.focuses);
       let arrayWithFocusObj = this.focuses.filter((f) => {
         return f.focusId === id;
       });

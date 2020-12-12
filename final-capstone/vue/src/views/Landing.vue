@@ -48,9 +48,14 @@ h1 {
   width: fit-content;
 }
 .main-container {
-  padding: 5rem 2rem;
+  width: 100%;
 }
 h1 {
   font-size: 2.5rem;
+}
+@media only screen and (max-width: 1000px) {
+  .container {
+    width: 438px;
+  }
 }
 </style>
