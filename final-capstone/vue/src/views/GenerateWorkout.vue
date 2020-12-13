@@ -59,6 +59,12 @@ import exerciseService from "@/services/ExerciseService";
 import axios from "axios";
 
 export default {
+  name: "generate-workout",
+  created() {
+    this.getTrainers();
+    this.getFocuses();
+    //this.getExercises();
+  },
   data() {
     return {
       selectedTrainers: [],
@@ -75,11 +81,6 @@ export default {
         (f) => f.focusName.charAt(0).toUpperCase() + f.focusName.slice(1) // Capitalize first letter :p
       );
     },
-  },
-  created() {
-    this.getTrainers();
-    this.getFocuses();
-    //this.getExercises();
   },
   methods: {
     feelingLucky() {
@@ -145,7 +146,7 @@ export default {
       let newTime;
       newTime = Number(this.selectedTime) + amount;
       this.selectedTime = newTime === 0 ? "" : newTime;
-      this.updateUrl();
+      //this.updateUrl(); // TODO Maybe
     },
   },
 };
