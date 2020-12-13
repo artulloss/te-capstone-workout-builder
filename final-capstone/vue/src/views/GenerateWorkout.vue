@@ -35,19 +35,19 @@
         :rules="numericRules"
         append-outer-icon="mdi-chevron-up"
         prepend-icon="mdi-chevron-down"
-        @click:append-outer="updateselectTime(10)"
-        @click:prepend="updateselectTime(-10)"
-        v-model.number="selectTime"
+        @click:append-outer="updateselectedTime(10)"
+        @click:prepend="updateselectedTime(-10)"
+        v-model.number="selectedTime"
       />
     </v-card-text>
     <v-divider />
-        <v-card-actions>
-          <v-btn color="success" @click="feelingLucky"
-            ><span>I'm Feeling Lucky</span></v-btn
-          >
-          <v-spacer />
-          <v-btn color="info" type="submit"><span>Generate</span></v-btn>
-        </v-card-actions>
+    <v-card-actions>
+      <v-btn color="success" @click="feelingLucky"
+        ><span>I'm Feeling Lucky</span></v-btn
+      >
+      <v-spacer />
+      <v-btn color="info" type="submit"><span>Generate</span></v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -61,9 +61,9 @@ export default {
     return {
       selectedTrainers: [],
       selectedFocuses: [],
-      selectTime: null,
+      selectedTime: null,
       trainers: [],
-      focuses: [], 
+      focuses: [],
       numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
     };
   },
@@ -80,22 +80,19 @@ export default {
     //this.getExercises();
   },
   methods: {
-    feelingLucky(){
+    feelingLucky() {
       const randomNumber = (max) => Math.floor(Math.random() * max);
       const randomArrayValues = (array) => {
-        const arrayValues = []
-        for(let i = 0; i < randomNumber(array.length); i++){
+        const arrayValues = [];
+        for (let i = 0; i <= randomNumber(array.length); i++) {
           const index = randomNumber(array.length);
           arrayValues.push(array[index]);
-          array = array.slice(index, index);
         }
-        return arrayValues;
-      }
-      
-      console.log(this.trainers, this.focuses)
+        return Array.from(new Set(arrayValues));
+      };
       this.selectedTrainers = randomArrayValues(this.trainers);
-      this.selectedFocuses = randomArrayValues(this.focuses);
-      console.log(this.selectedTrainers, this.selectedFocuses)
+      this.selectedFocuses = randomArrayValues(this.focusNames);
+      this.selectedTime = randomNumber(11) * 60;
     },
     getFocusId() {
       let arrayWithFocusObj = this.focuses.filter((f) => {
@@ -142,10 +139,10 @@ export default {
           console.log(error);
         });
     },
-    updateselectTime(amount) {
+    updateselectedTime(amount) {
       let newTime;
-      newTime = Number(this.selectTime) + amount;
-      this.selectTime = newTime === 0 ? "" : newTime;
+      newTime = Number(this.selectedTime) + amount;
+      this.selectedTime = newTime === 0 ? "" : newTime;
       this.updateUrl();
     },
   },

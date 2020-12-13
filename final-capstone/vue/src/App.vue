@@ -3,11 +3,11 @@
     <nav-bar />
     <v-main>
       <router-view />
-      <particles-bg
+      <!-- <particles-bg
         type="circle"
         :canvas="{ backgroundColor: '#888' }"
         :bg="true"
-      />
+      /> -->
     </v-main>
   </v-app>
 </template>
