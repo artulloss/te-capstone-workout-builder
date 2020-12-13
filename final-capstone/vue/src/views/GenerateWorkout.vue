@@ -15,6 +15,7 @@
         multiple
         chips
         deletable-chips
+        required
       />
       <v-select
         id="focuses"
@@ -27,6 +28,7 @@
         multiple
         chips
         deletable-chips
+        required
       />
       <v-text-field
         id="time"
@@ -44,11 +46,13 @@
     </v-card-text>
     <v-divider />
     <v-card-actions>
-      <v-btn color="success" @click="feelingLucky"
-        ><span>I'm Feeling Lucky</span></v-btn
-      >
-      <v-spacer />
-      <v-btn color="info" type="submit"><span>Generate</span></v-btn>
+      <v-form @submit.prevent="onGenerate">
+        <v-btn color="success" @click="feelingLucky"
+          ><span>I'm Feeling Lucky</span></v-btn
+        >
+
+        <v-btn color="info" type="submit"><span>Generate</span></v-btn>
+      </v-form>
     </v-card-actions>
   </v-card>
 </template>
@@ -67,6 +71,32 @@ export default {
   },
   data() {
     return {
+      exercises: [
+        {
+          exerciseId: 3,
+          exerciseName: "Soccer Drill Toe Taps",
+          focusId: 1,
+          description:
+            "Place a ball in the front of you, keep your hips forward, lifting up your knees, tap the top of the ball with the ball of your foot, then jump switch and tap the ball with the opposite foot.",
+          weight: null,
+          time: 30,
+          repetitions: null,
+          sets: null,
+          userId: 2,
+        },
+        {
+          exerciseId: 4,
+          exerciseName: "leap name",
+          focusId: 1,
+          description:
+            "Place a ball in the front of you, keep your hips forward, lifting up your knees, tap the top of the ball with the ball of your foot, then jump switch and tap the ball with the opposite foot.",
+          weight: null,
+          time: 30,
+          repetitions: null,
+          sets: null,
+          userId: 2,
+        },
+      ],
       selectedTrainers: [],
       selectedFocuses: [],
       selectedTime: null,
@@ -148,8 +178,29 @@ export default {
       this.selectedTime = newTime === 0 ? "" : newTime;
       //this.updateUrl(); // TODO Maybe
     },
+    onGenerate() {
+      const username = this.$store.state.user.username;
+      console.log(exerciseService);
+      exerciseService.deleteUserExercises(username).then((response) => {
+        if (response.status === 204) {
+          exerciseService
+            .addUserExercises(username, this.exercises)
+            .then((r) => {
+              if (r.status === 201) {
+                this.$router.push({ name: "exercises" });
+              }
+            });
+        }
+      });
+    },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+form {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+</style>

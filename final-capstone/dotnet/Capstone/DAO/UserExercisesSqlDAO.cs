@@ -40,5 +40,28 @@ namespace Capstone.DAO
                 return null;
             }
         }
+
+        public bool DeleteAllUserExercises(string username)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    SqlCommand insertCmd = new SqlCommand("DELETE FROM userExercises WHERE user_id = (SELECT user_id FROM users WHERE username = @username)", conn);
+                    insertCmd.Parameters.AddWithValue("@username", username);
+
+                    int numRowsAffected = insertCmd.ExecuteNonQuery();
+                    return (numRowsAffected >= 1);
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+
+        }
     }
 }

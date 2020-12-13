@@ -26,6 +26,12 @@ export default {
     console.log(response);
     return response;
   },
+  addUserExercises(username, exercises) {
+    return axios.post(`/user/${username}/exercise`, exercises);
+  },
+  deleteUserExercises(username) {
+    return axios.delete(`/user/${username}/exercise`);
+  },
 
   // In {time: 10, focusId: 1} etc
   getQueryRoute(filter) {

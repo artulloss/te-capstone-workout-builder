@@ -9,5 +9,7 @@ namespace Capstone.DAO
     public interface IUserExerciseDAO
     {
         Exercise AddUserExercise(Exercise exercise, string username);
+
+        bool DeleteAllUserExercises(string username);
     }
 }

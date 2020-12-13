@@ -41,19 +41,21 @@ namespace Capstone.Controllers
                 if (_userExerciseDao.AddUserExercise(exercise, username) != null) 
                 {
                     successfullyAdded.Add(exercise);
-                }
-                    
+                }         
                 
             }
             Console.WriteLine(exercises);
-            return successfullyAdded.Count > 0 ? (ActionResult) Ok(successfullyAdded) : BadRequest();
+            return successfullyAdded.Count > 0 ? (ActionResult) Created($"{username}/exercise", successfullyAdded) : BadRequest();
         }
 
         [HttpDelete("{username}/exercise")]
         public ActionResult DeleteAllUserExercises(string username)
         {
-            return Ok();
+            _userExerciseDao.DeleteAllUserExercises(username);
+            return NoContent();
+
         }
+
 
         [HttpGet("{username}/trainer/exercise")]
         public List<Exercise> GetTrainerExercises(string username, int? focusId = null, int? time = null)
