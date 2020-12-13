@@ -110,7 +110,6 @@ export default {
       });
       return (arrayWithFocusObj[0] || { focusId: undefined }).focusId;
     },
-
     getFocuses() {
       // Get all the focuses
       focusService

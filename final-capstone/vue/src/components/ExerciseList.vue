@@ -12,53 +12,40 @@
           <ul class="flex-container">
             <li>
               <b>Focus: </b>
-              <p
-                :class="getExerciseClass(e)"
-                :contentEditable="exerciseEditable[e.exerciseId]"
-              >
+              <p :class="getExerciseClass(e)">
                 {{ getFocusName(e.focusId) }}
               </p>
             </li>
             <li>
               <b>Time: </b>
-              <p
-                :class="getExerciseClass(e)"
-                :contentEditable="exerciseEditable[e.exerciseId]"
-              >
+              <p :class="getExerciseClass(e)">
                 {{ e.time }}
               </p>
             </li>
-            <li>
-              <b>Repetitions: </b>
-              <p
-                v-if="e.repetitions !== null"
-                :class="getExerciseClass(e)"
-                :contentEditable="exerciseEditable[e.exerciseId]"
-              >
-                {{ e.repetitions }}
-              </p>
-            </li>
-            <li>
-              <b>Sets: </b>
-              <p
-                v-if="e.repetitions !== null"
-                :class="getExerciseClass(e)"
-                :contentEditable="exerciseEditable[e.exerciseId]"
-              >
-                {{ e.sets }}
-              </p>
-            </li>
-            <li>
+            <li v-if="e.repetitions !== null">
               <b>Weight: </b>
-              <p
-                v-if="e.repetitions !== null"
-                :class="getExerciseClass(e)"
-                :contentEditable="exerciseEditable[e.exerciseId]"
-              >
+              <p :class="getExerciseClass(e)">
                 {{ e.weight }}
               </p>
             </li>
+            <li v-if="e.repetitions !== null">
+              <b>Repetitions: </b>
+              <p v-if="e.repetitions != null" :class="getExerciseClass(e)">
+                {{ e.repetitions }}
+              </p>
+            </li>
+            <li v-if="e.repetitions !== null">
+              <b>Sets: </b>
+              <p :class="getExerciseClass(e)">
+                {{ e.sets }}
+              </p>
+            </li>
           </ul>
+          <edit-exercise
+            v-if="exerciseEditable[e.exerciseId]"
+            :exercise="e"
+            :focuses="focuses"
+          />
           <div class="flex-container flex-center">
             <v-btn color="primary" @click="editExercise(e)">
               <span>{{
@@ -79,9 +66,11 @@
 <script>
 import Vue from "vue";
 import exerciseService from "@/services/ExerciseService";
+import EditExercise from "./EditExercise.vue";
 
 export default {
   name: "exercise-list",
+  components: { EditExercise },
   data() {
     return {
       exerciseEditable: [],
@@ -111,15 +100,14 @@ export default {
         (arrayWithFocusObj[0] || { focusName: undefined }).focusName
       );
     },
-
     editExercise(exercise) {
       console.log(document.querySelectorAll(this.getExerciseClass(exercise)));
       this.toggleExerciseVisible(exercise.exerciseId);
       if (!this.exerciseEditable[exercise.exerciseId]) {
-        console.log("Adam");
-        //exerciseService.updateExercise(exercise);
+        exerciseService.updateExercise(exercise).catch((e) => {
+          console.log(e);
+        });
       }
-
       return exercise;
     },
 

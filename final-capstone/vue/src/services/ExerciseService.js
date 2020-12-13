@@ -16,6 +16,7 @@ export default {
     return response;
   },
   updateExercise(exercise) {
+    // This route should probably be made to be /exercise/{id}
     let response = axios.put("/exercise", exercise);
     console.log(response);
     return response;

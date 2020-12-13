@@ -31,21 +31,21 @@
                   {{ e.time }}
                 </p>
               </li>
-              <li>
+              <li v-if="e.repetitions !== null">
                 <b>Repetitions: </b>
-                <p v-if="e.repetitions !== null">
+                <p>
                   {{ e.repetitions }}
                 </p>
               </li>
-              <li>
+              <li v-if="e.repetitions !== null">
                 <b>Sets: </b>
-                <p v-if="e.repetitions !== null">
+                <p>
                   {{ e.sets }}
                 </p>
               </li>
-              <li>
+              <li v-if="e.repetitions !== null">
                 <b>Weight: </b>
-                <p v-if="e.repetitions !== null">
+                <p>
                   {{ e.weight }}
                 </p>
               </li>
@@ -53,7 +53,7 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
-      <p v-if="!exercises.length" > 
+      <p v-if="!exercises.length">
         This is where your workouts will show up.
       </p>
     </v-card-text>
