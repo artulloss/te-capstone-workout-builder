@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Capstone.DAO;
 using Capstone.Models;
@@ -12,9 +13,11 @@ namespace Capstone.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserDAO _userDao;
-        
-        public UserController(IUserDAO userDao) {
+        private readonly IUserExerciseDAO _userExerciseDao;
+
+        public UserController(IUserDAO userDao, IUserExerciseDAO userExerciseDao) {
             _userDao = userDao;
+            _userExerciseDao = userExerciseDao;
         }
 
         [Authorize]
@@ -26,6 +29,30 @@ namespace Capstone.Controllers
         [HttpGet("{username}/exercise")]
         public List<Exercise> GetUserExercises(string username) {
             return _userDao.GetUserExercises(username);
+        }
+
+        [HttpPost("{username}/exercise")]
+        public ActionResult<Exercise> AddExercises(string username, List<Exercise> exercises)
+        {
+            List<Exercise> successfullyAdded = new List<Exercise>(); 
+
+            foreach(Exercise exercise in exercises)
+            {
+                if (_userExerciseDao.AddUserExercise(exercise, username) != null) 
+                {
+                    successfullyAdded.Add(exercise);
+                }
+                    
+                
+            }
+            Console.WriteLine(exercises);
+            return successfullyAdded.Count > 0 ? (ActionResult) Ok(successfullyAdded) : BadRequest();
+        }
+
+        [HttpDelete("{username}/exercise")]
+        public ActionResult DeleteAllUserExercises(string username)
+        {
+            return Ok();
         }
 
         [HttpGet("{username}/trainer/exercise")]
