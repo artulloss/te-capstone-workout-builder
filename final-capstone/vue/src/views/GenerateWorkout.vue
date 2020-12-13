@@ -62,6 +62,8 @@ import focusService from "@/services/FocusService";
 import exerciseService from "@/services/ExerciseService";
 import axios from "axios";
 
+const randomNumber = (max) => Math.floor(Math.random() * max) + 1;
+
 export default {
   name: "generate-workout",
   created() {
@@ -71,7 +73,8 @@ export default {
   },
   data() {
     return {
-      exercises: [
+      exercises: [],
+      exercisesTest: [
         {
           exerciseId: 3,
           exerciseName: "Soccer Drill Toe Taps",
@@ -102,6 +105,7 @@ export default {
       selectedTime: null,
       trainers: [],
       focuses: [],
+
       numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
     };
   },
@@ -114,7 +118,6 @@ export default {
   },
   methods: {
     feelingLucky() {
-      const randomNumber = (max) => Math.floor(Math.random() * max) + 1;
       const randomArrayValues = (array) => {
         const arrayValues = [];
         for (let i = 0; i <= randomNumber(array.length) - 1; i++) {
@@ -158,20 +161,6 @@ export default {
           console.log(error);
         });
     },
-    //Need to edit
-    getExercises(filter = {}) {
-      exerciseService
-        .getTrainerExercises(this.$store.state.user.username, filter)
-        .then((response) => {
-          console.log(response);
-          if (response.status === 200) {
-            this.internalExercises = response.data;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
     updateselectedTime(amount) {
       let newTime;
       newTime = Number(this.selectedTime) + amount;
@@ -179,12 +168,18 @@ export default {
       //this.updateUrl(); // TODO Maybe
     },
     onGenerate() {
+      this.getTrainerExercises().then((response) => {
+        if (response.status === 200) {
+          console.log("fix this");
+        }
+      });
+    },
+    replaceWorkout() {
       const username = this.$store.state.user.username;
-      console.log(exerciseService);
       exerciseService.deleteUserExercises(username).then((response) => {
         if (response.status === 204) {
           exerciseService
-            .addUserExercises(username, this.exercises)
+            .addUserExercises(username, this.exercisesTest)
             .then((r) => {
               if (r.status === 201) {
                 this.$router.push({ name: "exercises" });
@@ -192,6 +187,31 @@ export default {
             });
         }
       });
+    },
+    getTrainerExercises() {
+      for (const trainerName of this.selectedTrainers) {
+        exerciseService
+          .getTrainerExercises(trainerName)
+          .then((response) => {
+            console.log(response);
+            if (response.status === 200) {
+              this.exercises.concat(response.data);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+    generateWorkout() {
+      let time = 0;
+      const workout = [];
+      while (time <= this.selectedTime) {
+        const exercise = this.exercises[randomNumber - 1];
+        time += exercise.time;
+        workout.push(exercise);
+      }
+      return workout;
     },
   },
 };
