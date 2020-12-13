@@ -14,6 +14,7 @@
         clearable
         multiple
         chips
+        deletable-chips
       />
       <v-select
         id="focuses"
@@ -25,6 +26,7 @@
         clearable
         multiple
         chips
+        deletable-chips
       />
       <v-text-field
         id="time"
@@ -81,18 +83,18 @@ export default {
   },
   methods: {
     feelingLucky() {
-      const randomNumber = (max) => Math.floor(Math.random() * max);
+      const randomNumber = (max) => Math.floor(Math.random() * max) + 1;
       const randomArrayValues = (array) => {
         const arrayValues = [];
-        for (let i = 0; i <= randomNumber(array.length); i++) {
-          const index = randomNumber(array.length);
+        for (let i = 0; i <= randomNumber(array.length) - 1; i++) {
+          const index = randomNumber(array.length) - 1;
           arrayValues.push(array[index]);
         }
         return Array.from(new Set(arrayValues));
       };
       this.selectedTrainers = randomArrayValues(this.trainers);
       this.selectedFocuses = randomArrayValues(this.focusNames);
-      this.selectedTime = randomNumber(11) * 60;
+      this.selectedTime = randomNumber(10) * 60;
     },
     getFocusId() {
       let arrayWithFocusObj = this.focuses.filter((f) => {
