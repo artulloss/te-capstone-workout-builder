@@ -127,10 +127,12 @@ export default {
   methods: {
     onChange() {
       console.log("CHANGED");
-      this.convertUndefinedToNull();
+      this.fixExercise();
+      this.$emit("edit-exercise", this.exerciseInternal);
     },
-    convertUndefinedToNull() {
-      for (const prop of this.exerciseInternal) {
+    fixExercise() {
+      for (const prop in this.exerciseInternal) {
+        if (["exerciseName", "description", "time"].includes(prop)) break;
         if (this.exerciseInternal[prop] === "") {
           this.exerciseInternal[prop] = null;
         }
