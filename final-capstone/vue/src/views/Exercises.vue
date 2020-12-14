@@ -18,7 +18,7 @@
             <p>
               {{ e.description }}
             </p>
-            <ul class="flex-container">
+            <ul class="flex-container space-evenly">
               <li>
                 <b>Focus: </b>
                 <p>
@@ -28,7 +28,7 @@
               <li>
                 <b>Time: </b>
                 <p>
-                  {{ e.time }}
+                  {{ secondsToMinutes(e.time) }}
                 </p>
               </li>
               <li v-if="e.repetitions !== null">
@@ -116,7 +116,6 @@ export default {
         (arrayWithFocusObj[0] || { focusName: undefined }).focusName
       );
     },
-
     getExercises() {
       exerciseService
         .getUserExercises(this.$store.state.user.username)
@@ -131,6 +130,19 @@ export default {
           console.log(error);
         });
     },
+    secondsToMinutes(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      seconds = seconds % 60;
+      if (minutes > 0 && seconds > 0) {
+        return `${minutes} minutes and ${seconds} seconds`;
+      }
+      if (minutes > 0) {
+        return minutes + " minutes";
+      }
+      if (seconds > 0) {
+        return seconds + " seconds";
+      }
+    },
   },
 };
 </script>
@@ -138,8 +150,12 @@ export default {
 <style scoped>
 .flex-container {
   width: 100%;
-  justify-content: space-evenly;
+  justify-content: space-between;
   flex-wrap: wrap;
+}
+
+.space-evenly {
+  justify-content: space-evenly;
 }
 
 .flex-center {

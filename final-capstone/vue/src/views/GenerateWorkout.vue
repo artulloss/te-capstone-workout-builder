@@ -32,15 +32,15 @@
       />
       <v-text-field
         id="time"
-        suffix="seconds"
+        suffix="minutes"
         outlined
         label="Time"
         class="form-control"
         :rules="numericRules"
         append-outer-icon="mdi-chevron-up"
         prepend-icon="mdi-chevron-down"
-        @click:append-outer="updateselectedTime(10)"
-        @click:prepend="updateselectedTime(-10)"
+        @click:append-outer="updateselectedTime(5)"
+        @click:prepend="updateselectedTime(-5)"
         v-model.number="selectedTime"
       />
     </v-card-text>
@@ -101,7 +101,7 @@ export default {
       };
       this.selectedTrainers = randomArrayValues(this.trainers);
       this.selectedFocuses = randomArrayValues(this.focusNames);
-      this.selectedTime = randomNumber(10) * 60;
+      this.selectedTime = randomNumber(12) * 5;
     },
     getFocusId() {
       let arrayWithFocusObj = this.focuses.filter((f) => {
@@ -172,10 +172,11 @@ export default {
       const randomArrayValue = (array) => array[randomNumber(array.length) - 1];
       let time = 0;
       const workout = [];
-      while (time < this.selectedTime) {
+      const selectedTimeSeconds = 60 * this.selectedTime;
+      while (time < selectedTimeSeconds) {
         let exercise = randomArrayValue(exercises);
         let i = 0;
-        while (time + exercise.time > this.selectedTime) {
+        while (time + exercise.time > selectedTimeSeconds) {
           exercise = randomArrayValue(exercises);
           if (++i > 1000) {
             return workout;

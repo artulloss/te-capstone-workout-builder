@@ -156,11 +156,14 @@ namespace Capstone.DAO
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     conn.Open();
-                    SqlCommand insertCmd = new SqlCommand(@"DELETE FROM exercises WHERE exercise_id = @exercise_id", conn);
-                    insertCmd.Parameters.AddWithValue("@exercise_id", exerciseId);
+                    SqlCommand deleteUserExerciseCmd = new SqlCommand(@"DELETE FROM userExercises WHERE exercise_id = @exercise_id", conn);
+                    SqlCommand deleteCmd = new SqlCommand(@"DELETE FROM exercises WHERE exercise_id = @exercise_id", conn);
+                    deleteCmd.Parameters.AddWithValue("@exercise_id", exerciseId);
+                    deleteUserExerciseCmd.Parameters.AddWithValue("@exercise_id", exerciseId);
 
-                    int numRowsAffected = insertCmd.ExecuteNonQuery();
-                    return (numRowsAffected == 1);
+                    deleteUserExerciseCmd.ExecuteNonQuery();
+                    int numRowsAffectedExercise = deleteCmd.ExecuteNonQuery();
+                    return (numRowsAffectedExercise == 1);
 
                 }
             }

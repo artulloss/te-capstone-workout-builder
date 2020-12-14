@@ -3,25 +3,25 @@
     <nav-bar />
     <v-main>
       <router-view />
-      <!-- <particles-bg
+      <particles-bg
         type="circle"
         :canvas="{ backgroundColor: '#888' }"
         :bg="true"
-      /> -->
+      />
     </v-main>
   </v-app>
 </template>
 
 <script>
 import NavBar from "@/components/NavBar.vue";
-//import { ParticlesBg } from "particles-bg-vue";
+import { ParticlesBg } from "particles-bg-vue";
 
 export default {
   name: "App",
 
   components: {
     NavBar,
-    //ParticlesBg,
+    ParticlesBg,
   },
 };
 </script>
