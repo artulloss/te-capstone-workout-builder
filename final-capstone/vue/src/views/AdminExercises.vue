@@ -37,6 +37,7 @@
         :exercises="exercises"
         :focuses="focuses"
         @delete-exercise="internalExercises = $event"
+        @edit-exercise="editExercise"
       />
     </v-card-text>
   </v-card>
@@ -159,6 +160,13 @@ export default {
       newTime = Number(this.timeFilter) + amount;
       this.timeFilter = newTime === 0 ? "" : newTime;
       this.updateUrl();
+    },
+    editExercise(exercise) {
+      console.log("EDIT EXERCISE", exercise);
+      const index = this.internalExercises
+        .map((e) => e.exerciseId)
+        .indexOf(exercise.exerciseId);
+      this.$set(this.internalExercises, index, exercise);
     },
   },
 };

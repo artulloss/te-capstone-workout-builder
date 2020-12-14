@@ -45,6 +45,7 @@
             v-if="exerciseEditable[e.exerciseId]"
             :exercise="e"
             :focuses="focuses"
+            @edit-exercise="$emit('edit-exercise', $event)"
           />
           <div class="flex-container flex-center">
             <v-btn color="primary" @click="editExercise(e)">

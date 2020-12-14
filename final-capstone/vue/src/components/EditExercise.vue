@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-container" @change="onChange">
+  <div class="flex-container" @input="onChange">
     <v-text-field
       id="exercise-name"
       outlined
@@ -92,7 +92,7 @@ export default {
   data() {
     return {
       exerciseInternal: { ...this.exercise }, // shallow clone (same props)
-      pickedFocusName: "",
+      pickedFocusName: this.getFocusName(this.exercise.focusId),
       exerciseNameRules: [
         (v) =>
           (v || "").length <= 50 || "A maximum of 50 characters is allowed",
@@ -114,7 +114,7 @@ export default {
   computed: {
     focusNames() {
       return this.focuses.map(
-        (f) => f.focusName.charAt(0).toUpperCase() + f.focusName.slice(1) // Capitalize first letter :p
+        (f) => this.capitalizeFirstLetter(f.focusName) // Capitalize first letter :p
       );
     },
     requiredNumericRules() {
@@ -122,6 +122,18 @@ export default {
         this.numericRules.concat((v) => (v || "").length !== 0) ||
         "This is a required field"
       );
+    },
+  },
+  watch: {
+    pickedFocusName: function(newFocus, oldFocus) {
+      console.log("PICKED FOCUS NAME UPDATED");
+      if (newFocus === oldFocus) return;
+      const focusId = this.focuses[
+        this.focuses.map((f) => f.focusName).indexOf(newFocus.toLowerCase())
+      ].focusId;
+      console.log({ focusId });
+      this.exerciseInternal.focusId = focusId;
+      this.onChange();
     },
   },
   methods: {
@@ -142,6 +154,15 @@ export default {
       let newValue = Number(this.exerciseInternal[prop]) + amount;
       this.exerciseInternal[prop] = newValue === 0 ? null : newValue;
       this.onChange();
+    },
+    capitalizeFirstLetter(string) {
+      string = string + "";
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+    getFocusName(id) {
+      return this.capitalizeFirstLetter(
+        this.focuses[this.focuses.map((f) => f.focusId).indexOf(id)].focusName
+      );
     },
   },
 };
