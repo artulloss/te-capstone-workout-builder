@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-container">
+  <div class="flex-container" @change="onChange">
     <v-text-field
       id="exercise-name"
       outlined
@@ -41,10 +41,8 @@
         :rules="requiredNumericRules"
         append-outer-icon="mdi-chevron-up"
         prepend-icon="mdi-chevron-down"
-        @click:append-outer="
-          exerciseInternal.time = Number(exerciseInternal.time) + 10
-        "
-        @click:prepend="exerciseInternal.time -= 10"
+        @click:append-outer="changeExercisePropValueBy('time', 10)"
+        @click:prepend="changeExercisePropValueBy('time', -10)"
       />
       <v-text-field
         id="weight"
@@ -56,8 +54,8 @@
         v-model.number="exerciseInternal.weight"
         append-outer-icon="mdi-chevron-up"
         prepend-icon="mdi-chevron-down"
-        @click:append-outer="exerciseInternal.weight++"
-        @click:prepend="exerciseInternal.weight--"
+        @click:append-outer="changeExercisePropValueBy('weight', 1)"
+        @click:prepend="changeExercisePropValueBy('weight', -1)"
       />
     </div>
     <div class="flex-container flex-row">
@@ -70,8 +68,8 @@
         v-model.number="exerciseInternal.repetitions"
         append-outer-icon="mdi-chevron-up"
         prepend-icon="mdi-chevron-down"
-        @click:append-outer="exerciseInternal.repetitions++"
-        @click:prepend="exerciseInternal.repetitions--"
+        @click:append-outer="changeExercisePropValueBy('repetitions', 1)"
+        @click:prepend="changeExercisePropValueBy('repetitions', -1)"
       />
       <v-text-field
         id="sets"
@@ -82,8 +80,8 @@
         v-model.number="exerciseInternal.sets"
         append-outer-icon="mdi-chevron-up"
         prepend-icon="mdi-chevron-down"
-        @click:append-outer="exerciseInternal.sets++"
-        @click:prepend="exerciseInternal.sets--"
+        @click:append-outer="changeExercisePropValueBy('sets', 1)"
+        @click:prepend="changeExercisePropValueBy('sets', -1)"
       />
     </div>
   </div>
@@ -93,7 +91,7 @@
 export default {
   data() {
     return {
-      exerciseInternal: this.exercise,
+      exerciseInternal: { ...this.exercise }, // shallow clone (same props)
       pickedFocusName: "",
       exerciseNameRules: [
         (v) =>
@@ -103,8 +101,15 @@ export default {
     };
   },
   props: {
-    exercise: Object,
-    focuses: Array,
+    exercise: {
+      // TODO Make most props on other components required
+      type: Object,
+      required: true,
+    },
+    focuses: {
+      type: Array,
+      required: true,
+    },
   },
   computed: {
     focusNames() {
@@ -122,6 +127,19 @@ export default {
   methods: {
     onChange() {
       console.log("CHANGED");
+      this.convertUndefinedToNull();
+    },
+    convertUndefinedToNull() {
+      for (const prop of this.exerciseInternal) {
+        if (this.exerciseInternal[prop] === "") {
+          this.exerciseInternal[prop] = null;
+        }
+      }
+    },
+    changeExercisePropValueBy(prop, amount) {
+      let newValue = Number(this.exerciseInternal[prop]) + amount;
+      this.exerciseInternal[prop] = newValue === 0 ? null : newValue;
+      this.onChange();
     },
   },
 };

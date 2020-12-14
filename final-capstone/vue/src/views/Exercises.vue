@@ -130,7 +130,7 @@ export default {
 <style scoped>
 .flex-container {
   width: 100%;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
 }
 

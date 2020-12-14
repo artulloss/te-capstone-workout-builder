@@ -161,22 +161,26 @@ export default {
       let exercises = [];
       for (const trainerName of this.selectedTrainers) {
         const response = await exerciseService.getTrainerExercises(trainerName);
-        console.log({ response });
         if (response.status === 200) {
-          console.log("DATA", response.data);
           exercises = exercises.concat(response.data);
-          console.log("CONCATED", { exercises });
         }
       }
       return exercises;
     },
     generateWorkout(exercises) {
       console.log(exercises);
+      const randomArrayValue = (array) => array[randomNumber(array.length) - 1];
       let time = 0;
       const workout = [];
       while (time < this.selectedTime) {
-        const exercise = exercises[randomNumber(exercises.length) - 1];
-        console.log(exercise);
+        let exercise = randomArrayValue(exercises);
+        let i = 0;
+        while (time + exercise.time > this.selectedTime) {
+          exercise = randomArrayValue(exercises);
+          if (++i > 1000) {
+            return workout;
+          }
+        }
         time += exercise.time;
         workout.push(exercise);
       }
