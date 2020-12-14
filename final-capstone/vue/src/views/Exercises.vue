@@ -51,7 +51,7 @@
               </li>
             </ul>
             <div class="flex-container flex-center">
-              <v-btn color="primary">Mark Complete</v-btn>
+              <v-btn color="success">Mark Complete</v-btn>
             </div>
           </v-expansion-panel-content>
         </v-expansion-panel>
