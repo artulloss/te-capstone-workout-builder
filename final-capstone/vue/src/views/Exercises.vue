@@ -50,12 +50,20 @@
                 </p>
               </li>
             </ul>
+            <div class="flex-container flex-center">
+              <v-btn color="primary">Mark Complete</v-btn>
+            </div>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
       <p v-if="!exercises.length">
         This is where your workouts will show up.
       </p>
+      <v-card-actions
+        ><div class="flex-container flex-center">
+          <v-btn color="primary">Log Workout</v-btn>
+        </div>
+      </v-card-actions>
     </v-card-text>
   </v-card>
 </template>

@@ -57,6 +57,16 @@ CREATE TABLE userExercises (
                                constraint fk_userExercises_exercise foreign key (exercise_id) references exercises(exercise_id)
 )
 
+CREATE TABLE workoutHistory (
+								user_id int NOT NULL,
+								time int NOT NULL,
+								date date NOT NULL
+
+								constraint fk_workoutHistory_user foreign key (user_id) references users(user_id),
+)
+
+
+
 --populate default data
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('user','Jg45HuwT7PZkfuKTz6IB90CtWY4=','LHxP4Xh7bN0=','user');
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('admin','YhyGVQ+Ch69n4JMBncM4lNF/i9s=', 'Ar/aB2thQTI=','admin');
