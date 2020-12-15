@@ -10,7 +10,7 @@
     </v-card-title>
     <v-card-text>
       <v-expansion-panels multiple>
-        <v-expansion-panel v-for="e in exercises" :key="e.exerciseId">
+        <v-expansion-panel v-for="(e, index) in exercises" :key="index">
           <v-expansion-panel-header expand-icon="mdi-menu-down">
             <b>{{ e.exerciseName }}</b>
           </v-expansion-panel-header>
