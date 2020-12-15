@@ -11,55 +11,59 @@
     <v-card-text>
       <v-expansion-panels multiple @change="fixParticles">
         <v-expansion-panel v-for="(e, index) in exercises" :key="index">
-          <v-expansion-panel-header expand-icon="mdi-menu-down">
-            <b>{{ e.exerciseName }}</b>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <p>
-              {{ e.description }}
-            </p>
-            <ul class="flex-container space-evenly">
-              <li>
-                <b>Focus: </b>
-                <p>
-                  {{ getFocusName(e.focusId) }}
-                </p>
-              </li>
-              <li>
-                <b>Time: </b>
-                <p>
-                  {{ secondsToMinutes(e.time) }}
-                </p>
-              </li>
-              <li v-if="e.repetitions !== null">
-                <b>Repetitions: </b>
-                <p>
-                  {{ e.repetitions }}
-                </p>
-              </li>
-              <li v-if="e.repetitions !== null">
-                <b>Sets: </b>
-                <p>
-                  {{ e.sets }}
-                </p>
-              </li>
-              <li v-if="e.repetitions !== null">
-                <b>Weight: </b>
-                <p>
-                  {{ e.weight }}
-                </p>
-              </li>
-            </ul>
-            <div class="flex-container flex-center">
-              <v-btn color="success">Mark Complete</v-btn>
-            </div>
-          </v-expansion-panel-content>
+          <div :class="completedExercises[index] ? 'complete' : 'incomplete'">
+            <v-expansion-panel-header expand-icon="mdi-menu-down">
+              <b>{{ e.exerciseName }}</b>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <p>
+                {{ e.description }}
+              </p>
+              <ul class="flex-container space-evenly">
+                <li>
+                  <b>Focus: </b>
+                  <p>
+                    {{ getFocusName(e.focusId) }}
+                  </p>
+                </li>
+                <li>
+                  <b>Time: </b>
+                  <p>
+                    {{ secondsToMinutes(e.time) }}
+                  </p>
+                </li>
+                <li v-if="e.repetitions !== null">
+                  <b>Repetitions: </b>
+                  <p>
+                    {{ e.repetitions }}
+                  </p>
+                </li>
+                <li v-if="e.repetitions !== null">
+                  <b>Sets: </b>
+                  <p>
+                    {{ e.sets }}
+                  </p>
+                </li>
+                <li v-if="e.repetitions !== null">
+                  <b>Weight: </b>
+                  <p>
+                    {{ e.weight }}
+                  </p>
+                </li>
+              </ul>
+              <div class="flex-container flex-center">
+                <v-btn color="success" @click="markExerciseCompleted(index)">{{
+                  completedExercises[index]
+                    ? "Mark Incomplete"
+                    : "Mark Complete"
+                }}</v-btn>
+              </div>
+            </v-expansion-panel-content>
+          </div>
         </v-expansion-panel>
       </v-expansion-panels>
-      <p v-if="!exercises.length">
-        This is where your workouts will show up.
-      </p>
-      <v-divider style="padding-top: 0.5rem;" />
+      <p v-if="!exercises.length">This is where your workouts will show up.</p>
+      <v-divider style="padding-top: 0.5rem" />
       <v-card-actions>
         <div class="flex-container flex-center">
           <v-btn color="primary">Log Workout</v-btn>
@@ -82,6 +86,7 @@ export default {
     return {
       exercises: [],
       focuses: [],
+      completedExercises: [],
     };
   },
   computed: {
@@ -92,6 +97,26 @@ export default {
     },
   },
   methods: {
+    logWorkout() {
+      const time = this.calculateWorkoutLength();
+    },
+    calculateWorkoutLength() {
+      let time = 0;
+      for(const exerciseIndex of this.completedExercises) {
+        if(this.completedExercises[exerciseIndex]) {
+          time += this.exercises[exerciseIndex.time];
+        }
+      }
+      return time;
+    },
+    markExerciseCompleted(index) {
+      this.$set(
+        this.completedExercises,
+        index,
+        !this.completedExercises[index]
+      );
+      console.log("mark completed");
+    },
     getFocuses() {
       // Get all the focuses
       focusService
@@ -158,6 +183,10 @@ export default {
 </script>
 
 <style scoped>
+.complete {
+  background-color: lightgrey;
+}
+
 .flex-container {
   width: 100%;
   justify-content: space-between;
