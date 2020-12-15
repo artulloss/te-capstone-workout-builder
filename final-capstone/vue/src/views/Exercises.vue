@@ -66,7 +66,7 @@
       <v-divider style="padding-top: 0.5rem" />
       <v-card-actions>
         <div class="flex-container flex-center">
-          <v-btn color="primary">Log Workout</v-btn>
+          <v-btn color="primary" @click="logWorkout">Log Workout</v-btn>
         </div>
       </v-card-actions>
     </v-card-text>
@@ -76,6 +76,7 @@
 <script>
 import focusService from "@/services/FocusService";
 import exerciseService from "@/services/ExerciseService";
+import axios from "axios";
 
 export default {
   created() {
@@ -99,12 +100,28 @@ export default {
   methods: {
     logWorkout() {
       const time = this.calculateWorkoutLength();
+      console.log({ time });
+      if (time <= 0) return;
+      const workoutHistory = {
+        userId: this.$store.state.user.userId,
+        time: time,
+        date: new Date().toISOString().substring(0, 10),
+      };
+      axios
+        .post("/workoutHistory", workoutHistory)
+        .then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            alert("You have succesfully logged your workout");
+            this.completedExercises = [];
+          }
+        })
+        .catch((error) => console.log(error));
     },
     calculateWorkoutLength() {
       let time = 0;
-      for(const exerciseIndex of this.completedExercises) {
-        if(this.completedExercises[exerciseIndex]) {
-          time += this.exercises[exerciseIndex.time];
+      for (const exerciseIndex in this.completedExercises) {
+        if (this.completedExercises[exerciseIndex]) {
+          time += this.exercises[exerciseIndex].time;
         }
       }
       return time;
