@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Capstone.DAO
 {
-    public class WorkoutHistorySqlDAO
+    public class WorkoutHistorySqlDAO : IWorkoutHistoryDAO
     {
         private readonly string _connectionString;
         public WorkoutHistorySqlDAO(string connectionString)
@@ -15,7 +15,7 @@ namespace Capstone.DAO
             _connectionString = connectionString;
         }
 
-        public WorkoutHistory GetWorkoutHistory(int id)
+        public WorkoutHistory GetWorkoutHistory(int id, DateTime dateTime)
         {
 
             try
@@ -23,8 +23,9 @@ namespace Capstone.DAO
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     conn.Open();
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM workout_history WHERE user_id = @user_id", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM workoutHistory WHERE user_id = @user_id  AND date = @date", conn);
                     cmd.Parameters.AddWithValue("@user_id", id);
+                    cmd.Parameters.AddWithValue("@date", dateTime);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -47,7 +48,7 @@ namespace Capstone.DAO
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     conn.Open();
-                    SqlCommand insertCmd = new SqlCommand(@"INSERT INTO workout_history VALUES ( @user_id, @time, @date )", conn);
+                    SqlCommand insertCmd = new SqlCommand(@"INSERT INTO workoutHistory VALUES ( @user_id, @time, @date )", conn);
                     insertCmd.Parameters.AddWithValue("@user_id", workoutHistory.UserId);
                     insertCmd.Parameters.AddWithValue("@time", workoutHistory.Time);
                     insertCmd.Parameters.AddWithValue("@date", workoutHistory.Date);
@@ -66,15 +67,15 @@ namespace Capstone.DAO
                 return null;
             }
         }
-        public WorkoutHistory EditExercise(WorkoutHistory workoutHistory)
+        public WorkoutHistory EditWorkoutHistory(WorkoutHistory workoutHistory)
         {
             try
             {
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     conn.Open();
-                    SqlCommand insertCmd = new SqlCommand(@"UPDATE workout_history SET time = @time, date = @date
-                                                            WHERE user_id = @user_id", conn);
+                    SqlCommand insertCmd = new SqlCommand(@"UPDATE workoutHistory SET time = @time
+                                                            WHERE user_id = @user_id AND date = @date", conn);
                     insertCmd.Parameters.AddWithValue("@user_id", workoutHistory.UserId);
                     insertCmd.Parameters.AddWithValue("@time", workoutHistory.Time);
                     insertCmd.Parameters.AddWithValue("@date", workoutHistory.Date);

@@ -63,6 +63,7 @@ CREATE TABLE workoutHistory (
 								date date NOT NULL
 
 								constraint fk_workoutHistory_user foreign key (user_id) references users(user_id),
+								constraint pk_workoutHistory primary key (user_id, date) 
 )
 
 
