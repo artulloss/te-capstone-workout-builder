@@ -10,6 +10,7 @@ import store from "@/store/index";
 import Landing from "@/views/Landing.vue";
 import CreateExercise from "@/views/CreateExercise.vue";
 import GenerateWorkout from "@/views/GenerateWorkout.vue";
+import WorkoutHistory from "@/views/WorkoutHistory.vue";
 
 Vue.use(Router);
 
@@ -98,7 +99,15 @@ const router = new Router({
       meta: {
         requiresAuth: true,
       },
-    }
+    },
+    {
+      path: "/workout-history",
+      name: "workout-history",
+      component: WorkoutHistory,
+      meta: {
+        requiresAuth: true,
+      },
+    },
   ],
 });
 
