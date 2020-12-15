@@ -17,7 +17,7 @@ export default {
   name: "workout-history",
   data() {
     return {
-      chartdata: {
+      chartData: {
         labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         datasets: [
           {
@@ -27,16 +27,13 @@ export default {
           },
         ],
       },
-      options: {
+      chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
       },
     };
   },
   components: { WorkoutLineChart },
-  mounted() {
-    this.renderChart(this.chartdata, this.options);
-  },
 };
 </script>
 
