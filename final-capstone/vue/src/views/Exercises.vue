@@ -133,14 +133,16 @@ export default {
     secondsToMinutes(seconds) {
       const minutes = Math.floor(seconds / 60);
       seconds = seconds % 60;
+      const minuteString = minutes === 1 ? "minute" : "minutes";
+      const secondString = seconds === 1 ? "second" : "seconds";
       if (minutes > 0 && seconds > 0) {
-        return `${minutes} minutes and ${seconds} seconds`;
+        return `${minutes} ${minuteString} and ${seconds} ${secondString}`;
       }
       if (minutes > 0) {
-        return minutes + " minutes";
+        return `${minutes} ${minuteString}`;
       }
       if (seconds > 0) {
-        return seconds + " seconds";
+        return `${seconds} ${secondString}`;
       }
     },
   },
