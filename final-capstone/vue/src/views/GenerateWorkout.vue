@@ -4,6 +4,9 @@
       <h1 class="display-1">Generate Workout</h1>
     </v-card-title>
     <v-card-text>
+      <div class="alert alert-danger" role="alert" v-if="errorMessage">
+        {{ errorMessage }}
+      </div>
       <v-select
         id="trainers"
         outlined
@@ -80,6 +83,7 @@ export default {
       trainers: [],
       focuses: [],
       numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
+      errorMessage: "",
     };
   },
   computed: {
@@ -141,6 +145,7 @@ export default {
       //this.updateUrl(); // TODO Maybe
     },
     async onGenerate() {
+      if (!this.validateWorkoutSelections()) return;
       const exercises = await this.getTrainerExercises();
       const workout = this.generateWorkout(exercises);
       this.replaceWorkout(workout);
@@ -168,7 +173,6 @@ export default {
       return exercises;
     },
     generateWorkout(exercises) {
-      console.log(exercises);
       const randomArrayValue = (array) => array[randomNumber(array.length) - 1];
       let time = 0;
       const workout = [];
@@ -186,6 +190,17 @@ export default {
         workout.push(exercise);
       }
       return workout;
+    },
+    validateWorkoutSelections() {
+      this.errorMessage = "";
+      if (this.selectedTrainers.length < 1) {
+        this.errorMessage = "You must select at least one trainer!";
+      } else if (this.selectedFocuses.length < 1) {
+        this.errorMessage = "You must select at least one focus!";
+      } else if (this.selectedTime <= 0) {
+        this.errorMessage = "You must select a time greater than 0";
+      }
+      return this.errorMessage === "";
     },
   },
 };

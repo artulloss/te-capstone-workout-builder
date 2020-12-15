@@ -162,22 +162,36 @@ export default {
       const exercise = this.exercise;
       let field;
       console.log("Exercise", exercise.name, !exercise.name);
-      if (!exercise.time) {
-        field = "Time";
-      }
-      if (!arrayWithFocusObj[0]) {
-        field = "Focus";
-      }
-      if (!exercise.description) {
-        field = "Description";
-      }
+
       if (!exercise.exerciseName) {
         field = "Name";
+      } else if (!exercise.description) {
+        field = "Description";
+      } else if (!arrayWithFocusObj[0]) {
+        field = "Focus";
+      } else if (exercise !== 0 && !exercise.time) {
+        field = "Time";
       }
+
       if (field) {
         this.errorMessage = `${field} is required!`;
         return;
       }
+      const greaterThanZero = (value) =>
+        (this.errorMessage = value + " must be greater than 0");
+      if (exercise.time <= 0) {
+        return greaterThanZero("Time");
+      }
+      if (exercise.weight === 0 || exercise.weight < 0) {
+        return greaterThanZero("Weight");
+      }
+      if (exercise.repetitions === 0 || exercise.repetitions < 0) {
+        return greaterThanZero("Repetitions");
+      }
+      if (exercise.sets === 0 || exercise.sets < 0) {
+        return greaterThanZero("Sets");
+      }
+
       this.errorMessage = "";
       exercise.focusId = arrayWithFocusObj[0].focusId; // This should *always* work
       exerciseService

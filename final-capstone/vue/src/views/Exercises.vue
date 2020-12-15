@@ -9,7 +9,7 @@
       </div>
     </v-card-title>
     <v-card-text>
-      <v-expansion-panels multiple>
+      <v-expansion-panels multiple @change="fixParticles">
         <v-expansion-panel v-for="(e, index) in exercises" :key="index">
           <v-expansion-panel-header expand-icon="mdi-menu-down">
             <b>{{ e.exerciseName }}</b>
@@ -59,8 +59,9 @@
       <p v-if="!exercises.length">
         This is where your workouts will show up.
       </p>
-      <v-card-actions
-        ><div class="flex-container flex-center">
+      <v-divider style="padding-top: 0.5rem;" />
+      <v-card-actions>
+        <div class="flex-container flex-center">
           <v-btn color="primary">Log Workout</v-btn>
         </div>
       </v-card-actions>
@@ -144,6 +145,13 @@ export default {
       if (seconds > 0) {
         return `${seconds} ${secondString}`;
       }
+    },
+    fixParticles() {
+      setTimeout(() => {
+        let event = document.createEvent("UIEvents");
+        event.initUIEvent("resize", true, false, window, 0);
+        window.dispatchEvent(event);
+      }, 200); // 200ms delay
     },
   },
 };
