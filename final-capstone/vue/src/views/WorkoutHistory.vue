@@ -41,14 +41,50 @@ export default {
       .then((response) => {
         if (response.status === 200) {
           const chartData = { ...this.chartData };
-          chartData.datasets.data = response.data.map((wH) => wH.time / 60);
-          chartData.labels = response.data.map((wH) => wH.date);
-          this.chartData = chartData;
+          const datasets = [...this.chartData.datasets];
+          chartData.labels = this.getLabels(response.data);
+          datasets[0].data = this.getData(response.data, chartData.labels);
           console.log(chartData);
+          this.chartData = chartData;
         }
       });
   },
   components: { WorkoutLineChart },
+  methods: {
+    getData(data, labels) {
+      const timesListed = data.map((wH) => wH.time / 60);
+      const datesListed = data.map((wH) => new Date(wH.date));
+      data = [];
+      for (const dateString of labels) {
+        let notZero = false;
+        for (const [index, date] of datesListed.entries()) {
+          if (date.toDateString() === dateString) {
+            data.push(timesListed[index]);
+            notZero = true;
+            break;
+          }
+          console.log("date.toDateString() !== dateString");
+        }
+        if (notZero) continue;
+        console.log("PUSHED ZERO", dateString);
+        data.push(0);
+      }
+      return data;
+    },
+    getLabels(data) {
+      const datesListed = data.map((wH) => new Date(wH.date));
+      const dates = [];
+      if (datesListed[0] === undefined) return []; // If no data at all
+      const dt = datesListed[0];
+      const end = datesListed[datesListed.length - 1];
+      while (dt <= end) {
+        dates.push(new Date(dt));
+        dt.setDate(dt.getDate() + 1);
+      }
+      console.log(dates);
+      return dates.map((d) => d.toDateString());
+    },
+  },
 };
 </script>
 
