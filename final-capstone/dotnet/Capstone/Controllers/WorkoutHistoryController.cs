@@ -29,6 +29,12 @@ namespace Capstone.Controllers
             return workoutHistory != null ? (ActionResult)Ok(workoutHistory) : NotFound();
         }
 
+        [HttpGet("{id}")]
+        public List<WorkoutHistory> GetWorkoutHistory(int id)
+        {
+            return _workoutHistoryDao.GetWorkoutHistory(id);
+        }
+
         [HttpPost]
         public ActionResult<WorkoutHistory> AddWorkoutHistory(WorkoutHistory workoutHistory)
         {

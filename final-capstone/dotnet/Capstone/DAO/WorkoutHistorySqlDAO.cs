@@ -23,7 +23,7 @@ namespace Capstone.DAO
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     conn.Open();
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM workoutHistory WHERE user_id = @user_id  AND date = @date", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM workoutHistory WHERE user_id = @user_id AND date = @date", conn);
                     cmd.Parameters.AddWithValue("@user_id", id);
                     cmd.Parameters.AddWithValue("@date", dateTime);
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -36,9 +36,33 @@ namespace Capstone.DAO
             catch (Exception e)
             {
                 Console.WriteLine(e);
-
             }
             return null;
+        }
+        public List<WorkoutHistory> GetWorkoutHistory(int id)
+        {
+            List<WorkoutHistory> workoutHistories = new List<WorkoutHistory>();
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM workoutHistory WHERE user_id = @user_id", conn);
+                    cmd.Parameters.AddWithValue("@user_id", id);                    
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        workoutHistories.Add(ReaderToWorkoutHistory(reader));
+                    }                    
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+            }
+            return workoutHistories;
         }
 
         public WorkoutHistory AddWorkoutHistory(WorkoutHistory workoutHistory)

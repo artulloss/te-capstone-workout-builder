@@ -3,27 +3,29 @@
     <v-card-title>
       <div class="flex-container">
         <h1 class="display-1">Workout History</h1>
+        <v-btn :to="{ name: 'exercises' }" color="primary">Exercises</v-btn>
       </div>
     </v-card-title>
     <v-card-text>
-      <workout-line-chart :chartdata="chartData" :options="chartOptions" />
+      <workout-line-chart :chartData="chartData" :options="chartOptions" />
     </v-card-text>
   </v-card>
 </template>
 
 <script>
 import WorkoutLineChart from "@/components/WorkoutLineChart.vue";
+import axios from "axios";
 export default {
   name: "workout-history",
   data() {
     return {
       chartData: {
-        labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        labels: [],
         datasets: [
           {
             label: "Minutes",
             backgroundColor: "#f87979",
-            data: [40, 20, 0, 30, 60],
+            data: [],
           },
         ],
       },
@@ -33,8 +35,22 @@ export default {
       },
     };
   },
+  created() {
+    axios.get(`/workoutHistory/${this.$store.state.user.userId}`).then((response) => {
+      console.log({response});
+      if (response.status === 200) {
+        this.chartData.datasets.data = response.data.map((wH) => wH.time / 60);
+        this.chartData.labels = response.data.map((wH) => wH.date);
+      }
+    });
+  },
   components: { WorkoutLineChart },
 };
 </script>
 
-<style></style>
+<style scoped>
+.flex-container {
+  justify-content: space-between;
+  width: 100%;
+}
+</style>

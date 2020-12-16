@@ -65,7 +65,8 @@
       <p v-if="!exercises.length">This is where your workouts will show up.</p>
       <v-divider style="padding-top: 0.5rem" />
       <v-card-actions>
-        <div class="flex-container flex-center">
+        <div class="flex-container">
+          <v-btn color="info" :to="{name: 'workout-history'}">Workout History</v-btn>
           <v-btn color="primary" @click="logWorkout">Log Workout</v-btn>
         </div>
       </v-card-actions>
