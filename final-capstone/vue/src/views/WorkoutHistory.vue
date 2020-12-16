@@ -36,13 +36,17 @@ export default {
     };
   },
   created() {
-    axios.get(`/workoutHistory/${this.$store.state.user.userId}`).then((response) => {
-      console.log({response});
-      if (response.status === 200) {
-        this.chartData.datasets.data = response.data.map((wH) => wH.time / 60);
-        this.chartData.labels = response.data.map((wH) => wH.date);
-      }
-    });
+    axios
+      .get(`/workoutHistory/${this.$store.state.user.userId}`)
+      .then((response) => {
+        if (response.status === 200) {
+          const chartData = { ...this.chartData };
+          chartData.datasets.data = response.data.map((wH) => wH.time / 60);
+          chartData.labels = response.data.map((wH) => wH.date);
+          this.chartData = chartData;
+          console.log(chartData);
+        }
+      });
   },
   components: { WorkoutLineChart },
 };
