@@ -62,7 +62,10 @@
           </div>
         </v-expansion-panel>
       </v-expansion-panels>
-      <p v-if="!exercises.length">This is where your workouts will show up.</p>
+      <p v-if="!exercises.length">Welcome to your exercises page! From here, you can click on the 
+        <b>Generate Workout</b> button to generate a new workout, <b>Log Workout</b> to log the exercises you 
+        have completed, or <b>Workout History</b> to view your past workouts.
+      </p>
       <v-divider style="padding-top: 0.5rem" />
       <v-card-actions>
         <div class="flex-container">
