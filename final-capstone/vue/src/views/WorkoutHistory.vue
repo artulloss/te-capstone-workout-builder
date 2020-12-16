@@ -19,7 +19,7 @@ export default {
   name: "workout-history",
   data() {
     return {
-      chartData: {
+      chartDataInternal: {
         labels: [],
         datasets: [
           {
@@ -33,6 +33,7 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       },
+      length: 7,
     };
   },
   created() {
@@ -40,16 +41,22 @@ export default {
       .get(`/workoutHistory/${this.$store.state.user.userId}`)
       .then((response) => {
         if (response.status === 200) {
-          const chartData = { ...this.chartData };
-          const datasets = [...this.chartData.datasets];
-          chartData.labels = this.getLabels(response.data);
-          datasets[0].data = this.getData(response.data, chartData.labels);
-          console.log(chartData);
-          this.chartData = chartData;
+          const chartDataInternal = { ...this.chartDataInternal };
+          chartDataInternal.labels = this.getLabels(response.data);
+          chartDataInternal.datasets[0].data = this.getData(
+            response.data,
+            chartDataInternal.labels
+          );
+          this.chartDataInternal = chartDataInternal;
         }
       });
   },
   components: { WorkoutLineChart },
+  computed: {
+    chartData() {
+      return this.chartDataInternal;
+    },
+  },
   methods: {
     getData(data, labels) {
       const timesListed = data.map((wH) => wH.time / 60);
@@ -63,10 +70,8 @@ export default {
             notZero = true;
             break;
           }
-          console.log("date.toDateString() !== dateString");
         }
         if (notZero) continue;
-        console.log("PUSHED ZERO", dateString);
         data.push(0);
       }
       return data;
