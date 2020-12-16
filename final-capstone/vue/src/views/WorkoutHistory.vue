@@ -9,6 +9,18 @@
     <v-card-text>
       <workout-line-chart :chartData="chartData" :options="chartOptions" />
     </v-card-text>
+    <v-text-field
+      id="days"
+      outlined
+      class="form-control"
+      :rules="numericRules"
+      label="Days"
+      v-model.number="days"
+      append-outer-icon="mdi-chevron-up"
+      prepend-icon="mdi-chevron-down"
+      @click:append-outer="days++"
+      @click:prepend="days--"
+    />
   </v-card>
 </template>
 
@@ -33,7 +45,8 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       },
-      length: 7,
+      days: 7,
+      numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
     };
   },
   created() {
@@ -52,6 +65,27 @@ export default {
       });
   },
   components: { WorkoutLineChart },
+  /*watch: {
+    days(newDays, oldDays) {
+      if (newDays === oldDays) {
+        return;
+      }
+      let date = new Date();
+      date.setDate(date.getDate() - newDays + 1);
+      const labels = this.getLabels([
+        {
+          date,
+        },
+        {
+          date: new Date(),
+        },
+      ]);
+      console.log(labels);
+      let placeholder = this.chartDataInternal.datasets.data.
+      const data = this.getData(placeholder, labels);
+      console.log(data);
+    },
+  },*/
   computed: {
     chartData() {
       return this.chartDataInternal;

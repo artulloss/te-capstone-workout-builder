@@ -66,8 +66,15 @@
       <v-divider style="padding-top: 0.5rem" />
       <v-card-actions>
         <div class="flex-container">
-          <v-btn color="info" :to="{name: 'workout-history'}">Workout History</v-btn>
-          <v-btn color="primary" @click="logWorkout">Log Workout</v-btn>
+          <v-btn color="info" :to="{ name: 'workout-history' }"
+            >Workout History</v-btn
+          >
+          <v-btn
+            color="primary"
+            @click="logWorkout"
+            :disabled="!isAnExerciseCompleted"
+            >Log Workout</v-btn
+          >
         </div>
       </v-card-actions>
     </v-card-text>
@@ -96,6 +103,9 @@ export default {
       return this.focuses.map(
         (f) => f.focusName.charAt(0).toUpperCase() + f.focusName.slice(1) // Capitalize first letter :p
       );
+    },
+    isAnExerciseCompleted() {
+      return this.completedExercises.some((c) => c);
     },
   },
   methods: {
