@@ -27,6 +27,8 @@
 <script>
 import WorkoutLineChart from "@/components/WorkoutLineChart.vue";
 import axios from "axios";
+const localStorage = window.localStorage;
+
 export default {
   name: "workout-history",
   data() {
@@ -46,7 +48,7 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       },
-      days: 7,
+      days: 0,
       numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
     };
   },
@@ -56,8 +58,12 @@ export default {
       .then((response) => {
         if (response.status === 200) {
           this.reponse = response;
-          const labels = this.getLabels(response.data);
-          this.setChartData(labels, this.getData(response.data, labels));
+          let daysString = localStorage.getItem("days");
+          if (daysString === null) {
+            this.days = 7; // Default to 1 week
+            return;
+          }
+          this.days = Number(daysString);
         }
       });
   },
@@ -67,21 +73,17 @@ export default {
       if (newDays === oldDays) {
         return;
       }
-      let date = new Date();
-      date.setDate(date.getDate() - newDays + 1);
-      const labels = this.getLabels([
-        {
-          date, // From today - length + 1 days
-        },
-        {
-          date: new Date(), // To today
-        },
-      ]);
+      let startDate = new Date();
+      startDate.setDate(startDate.getDate() - newDays + 1);
+      const dateStrings = this.getDateStrings(
+        startDate, // From today - length + 1 days
+        new Date() // To today
+      );
       const responseData = this.reponse.data;
       const dates = responseData.map((wH) => new Date(wH.date).toDateString());
-      const initialTimes = responseData.map((wH) => wH.time);
+      const initialTimes = responseData.map((wH) => wH.time / 60); // Minutes
       const dataset = [];
-      for (const dateString of labels) {
+      for (const dateString of dateStrings) {
         let notZero = false;
         for (const [index, date] of dates.entries()) {
           if (dateString === new Date(date).toDateString()) {
@@ -92,7 +94,8 @@ export default {
         if (notZero) continue;
         dataset.push(0);
       }
-      this.setChartData(labels, dataset);
+      this.setChartData(dateStrings, dataset);
+      localStorage.setItem("days", newDays); // Save to local storage :p
     },
   },
   methods: {
@@ -102,30 +105,8 @@ export default {
       chartData.datasets[0].data = dataset;
       this.chartData = chartData;
     },
-    getData(data, labels) {
-      const timesListed = data.map((wH) => wH.time / 60);
-      const datesListed = data.map((wH) => new Date(wH.date));
-      data = [];
-      for (const dateString of labels) {
-        let notZero = false;
-        for (const [index, date] of datesListed.entries()) {
-          if (date.toDateString() === dateString) {
-            data.push(timesListed[index]);
-            notZero = true;
-            break;
-          }
-        }
-        if (notZero) continue;
-        data.push(0);
-      }
-      return data;
-    },
-    getLabels(data) {
-      const datesListed = data.map((wH) => new Date(wH.date));
+    getDateStrings(dt, end) {
       const dates = [];
-      if (datesListed[0] === undefined) return []; // If no data at all
-      const dt = datesListed[0];
-      const end = datesListed[datesListed.length - 1];
       while (dt <= end) {
         dates.push(new Date(dt));
         dt.setDate(dt.getDate() + 1);
