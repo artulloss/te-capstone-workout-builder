@@ -77,12 +77,12 @@
           <v-btn
             color="info"
             @click="
-              completedExercises = completedExercises.every((v) => !v)
+              completedExercises = completedExercises.some((v) => !v)
                 ? new Array(exercises.length).fill(true)
                 : new Array(exercises.length).fill(false)
             "
             >{{
-              completedExercises.every((v) => !v)
+              completedExercises.some((v) => !v)
                 ? "Mark all complete"
                 : "Mark all incomplete"
             }}</v-btn
