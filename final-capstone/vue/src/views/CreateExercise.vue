@@ -102,6 +102,7 @@
 <script>
 import exerciseService from "@/services/ExerciseService";
 import focusService from "@/services/FocusService";
+import utilities from "@/utilities";
 
 export default {
   name: "create-exercise",
@@ -133,8 +134,7 @@ export default {
         (v) =>
           (v || "").length <= 50 || "A maximum of 50 characters is allowed",
       ],
-      numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
-
+      numericRules: utilities.numericRules,
       focuses: [],
       pickedFocusName: "",
       errorMessage: "",
@@ -142,16 +142,11 @@ export default {
   },
   computed: {
     focusNames() {
-      return this.focuses.map(
-        (f) => f.focusName.charAt(0).toUpperCase() + f.focusName.slice(1) // Capitalize first letter :p
+      return this.focuses.map((f) =>
+        utilities.capitalizeFirstLetter(f.focusName)
       );
     },
-    requiredNumericRules() {
-      return (
-        this.numericRules.concat((v) => (v || "").length !== 0) ||
-        "This is a required field"
-      );
-    },
+    requiredNumericRules: utilities.requiredNumericRules,
   },
   methods: {
     createExercise() {

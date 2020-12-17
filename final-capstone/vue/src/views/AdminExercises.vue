@@ -47,6 +47,7 @@
 import ExerciseList from "@/components/ExerciseList";
 import focusService from "@/services/FocusService";
 import exerciseService from "@/services/ExerciseService";
+import utilities from "@/utilities";
 
 // The particles stretch to fix the canvas size on resize, we recall it when the page size changes
 const fixParticles = (newData, oldData) => {
@@ -66,7 +67,7 @@ export default {
       focusFilter: "",
       timeFilter: null,
       focuses: [],
-      numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
+      numericRules: utilities.numericRules,
     };
   },
   created() {
@@ -86,7 +87,7 @@ export default {
   computed: {
     focusNames() {
       return this.focuses.map(
-        (f) => f.focusName.charAt(0).toUpperCase() + f.focusName.slice(1) // Capitalize first letter :p
+        (f) => utilities.capitalizeFirstLetter(f.focusName) // Capitalize first letter :p
       );
     },
     exercises() {
@@ -156,9 +157,10 @@ export default {
       );
     },
     updateTimeFilter(amount) {
-      let newTime;
-      newTime = Number(this.timeFilter) + amount;
-      this.timeFilter = newTime === 0 ? "" : newTime;
+      let time = this.timeFilter;
+      const newTime = Number(this.timeFilter) + amount;
+      time = newTime < 0 ? time : newTime;
+      this.timeFilter = time === 0 ? "" : time;
       this.updateUrl();
     },
     editExercise(exercise) {

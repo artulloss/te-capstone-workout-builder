@@ -64,6 +64,7 @@
 import focusService from "@/services/FocusService";
 import exerciseService from "@/services/ExerciseService";
 import axios from "axios";
+import utilities from "@/utilities";
 
 const randomNumber = (max) => Math.floor(Math.random() * max) + 1;
 
@@ -82,14 +83,14 @@ export default {
       selectedTime: null,
       trainers: [],
       focuses: [],
-      numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
+      numericRules: utilities.numericRules,
       errorMessage: "",
     };
   },
   computed: {
     focusNames() {
-      return this.focuses.map(
-        (f) => f.focusName.charAt(0).toUpperCase() + f.focusName.slice(1) // Capitalize first letter :p
+      return this.focuses.map((f) =>
+        utilities.capitalizeFirstLetter(f.focusName)
       );
     },
   },
@@ -154,11 +155,14 @@ export default {
       const username = this.$store.state.user.username;
       exerciseService.deleteUserExercises(username).then((response) => {
         if (response.status === 204) {
-          exerciseService.addUserExercises(username, exercises).then((r) => {
-            if (r.status === 201) {
-              this.$router.push({ name: "exercises" });
-            }
-          });
+          exerciseService
+            .addUserExercises(username, exercises)
+            .then((r) => {
+              if (r.status === 201) {
+                this.$router.push({ name: "exercises" });
+              }
+            })
+            .catch(() => (this.errorMessage = "Failed to generate a workout!"));
         }
       });
     },

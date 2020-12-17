@@ -11,11 +11,14 @@
           width="40"
         />
       </router-link>
-
-      <h3>Fitness Elevator</h3>
+      <h2 class="big">Fitness Elevator</h2>
+      <h3 class="small">Fitness Elevator</h3>
+      <div class="flex-container">
+        <p id="slogan"><em>"Taking you to the next level of fitness"</em></p>
+      </div>
     </div>
 
-    <v-spacer></v-spacer>
+    <v-spacer />
     <v-btn text v-if="$store.state.token !== ''" @click="logout">
       <span class="mr-2">Logout</span>
       <v-icon>mdi-logout</v-icon>
@@ -40,4 +43,27 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.flex-container {
+  margin-left: 2.5rem;
+  align-items: center;
+  height: 100%;
+}
+#slogan {
+  margin-bottom: 0;
+}
+.small {
+  display: none;
+}
+@media only screen and (max-width: 454px) {
+  #slogan {
+    display: none;
+  }
+  .big {
+    display: none;
+  }
+  .small {
+    display: inline;
+  }
+}
+</style>

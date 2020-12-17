@@ -88,6 +88,7 @@
 </template>
 
 <script>
+import utilities from "@/utilities";
 export default {
   data() {
     return {
@@ -97,7 +98,7 @@ export default {
         (v) =>
           (v || "").length <= 50 || "A maximum of 50 characters is allowed",
       ],
-      numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
+      numericRules: utilities.numericRules,
     };
   },
   props: {
@@ -114,15 +115,10 @@ export default {
   computed: {
     focusNames() {
       return this.focuses.map(
-        (f) => this.capitalizeFirstLetter(f.focusName) // Capitalize first letter :p
+        (f) => utilities.capitalizeFirstLetter(f.focusName) // Capitalize first letter :p
       );
     },
-    requiredNumericRules() {
-      return (
-        this.numericRules.concat((v) => (v || "").length !== 0) ||
-        "This is a required field"
-      );
-    },
+    requiredNumericRules: utilities.requiredNumericRules,
   },
   watch: {
     pickedFocusName: function(newFocus, oldFocus) {
@@ -155,12 +151,8 @@ export default {
       this.exerciseInternal[prop] = newValue === 0 ? null : newValue;
       this.onChange();
     },
-    capitalizeFirstLetter(string) {
-      string = string + "";
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    },
     getFocusName(id) {
-      return this.capitalizeFirstLetter(
+      return utilities.capitalizeFirstLetter(
         this.focuses[this.focuses.map((f) => f.focusId).indexOf(id)].focusName
       );
     },

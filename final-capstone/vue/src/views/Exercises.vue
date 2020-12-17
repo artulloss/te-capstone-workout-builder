@@ -103,6 +103,7 @@
 import focusService from "@/services/FocusService";
 import exerciseService from "@/services/ExerciseService";
 import axios from "axios";
+import utilities from "@/utilities";
 
 export default {
   created() {
@@ -118,8 +119,8 @@ export default {
   },
   computed: {
     focusNames() {
-      return this.focuses.map(
-        (f) => f.focusName.charAt(0).toUpperCase() + f.focusName.slice(1) // Capitalize first letter :p
+      return this.focuses.map((f) =>
+        utilities.capitalizeFirstLetter(f.focusName)
       );
     },
     isAnExerciseCompleted() {
@@ -176,15 +177,11 @@ export default {
           console.log(error);
         });
     },
-    capitalizeFirstLetter(string) {
-      string = string + "";
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    },
     getFocusName(id) {
       let arrayWithFocusObj = this.focuses.filter((f) => {
         return f.focusId === id;
       });
-      return this.capitalizeFirstLetter(
+      return utilities.capitalizeFirstLetter(
         (arrayWithFocusObj[0] || { focusName: undefined }).focusName
       );
     },

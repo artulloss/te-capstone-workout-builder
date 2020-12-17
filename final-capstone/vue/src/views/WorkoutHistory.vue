@@ -27,6 +27,7 @@
 <script>
 import WorkoutLineChart from "@/components/WorkoutLineChart.vue";
 import axios from "axios";
+import utilities from "@/utilities";
 const localStorage = window.localStorage;
 
 export default {
@@ -49,7 +50,7 @@ export default {
         maintainAspectRatio: false,
       },
       days: 0,
-      numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
+      numericRules: utilities.numericRules,
     };
   },
   created() {

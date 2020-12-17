@@ -68,6 +68,7 @@
 import Vue from "vue";
 import exerciseService from "@/services/ExerciseService";
 import EditExercise from "./EditExercise.vue";
+import utilities from "@/utilities";
 
 export default {
   name: "exercise-list",
@@ -84,20 +85,16 @@ export default {
   computed: {
     focusNames() {
       return this.props.focuses.map((f) =>
-        this.capitalizeFirstLetter(f.focusName)
+        utilities.capitalizeFirstLetter(f.focusName)
       );
     },
   },
   methods: {
-    capitalizeFirstLetter(string) {
-      string = string + "";
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    },
     getFocusName(id) {
       let arrayWithFocusObj = this.focuses.filter((f) => {
         return f.focusId === id;
       });
-      return this.capitalizeFirstLetter(
+      return utilities.capitalizeFirstLetter(
         (arrayWithFocusObj[0] || { focusName: undefined }).focusName
       );
     },
