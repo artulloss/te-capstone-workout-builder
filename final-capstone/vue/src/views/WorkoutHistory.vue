@@ -31,7 +31,8 @@ export default {
   name: "workout-history",
   data() {
     return {
-      chartDataInternal: {
+      response: {},
+      chartData: {
         labels: [],
         datasets: [
           {
@@ -54,18 +55,14 @@ export default {
       .get(`/workoutHistory/${this.$store.state.user.userId}`)
       .then((response) => {
         if (response.status === 200) {
-          const chartDataInternal = { ...this.chartDataInternal };
-          chartDataInternal.labels = this.getLabels(response.data);
-          chartDataInternal.datasets[0].data = this.getData(
-            response.data,
-            chartDataInternal.labels
-          );
-          this.chartDataInternal = chartDataInternal;
+          this.reponse = response;
+          const labels = this.getLabels(response.data);
+          this.setChartData(labels, this.getData(response.data, labels));
         }
       });
   },
   components: { WorkoutLineChart },
-  /*watch: {
+  watch: {
     days(newDays, oldDays) {
       if (newDays === oldDays) {
         return;
@@ -74,24 +71,37 @@ export default {
       date.setDate(date.getDate() - newDays + 1);
       const labels = this.getLabels([
         {
-          date,
+          date, // From today - length + 1 days
         },
         {
-          date: new Date(),
+          date: new Date(), // To today
         },
       ]);
-      console.log(labels);
-      let placeholder = this.chartDataInternal.datasets.data.
-      const data = this.getData(placeholder, labels);
-      console.log(data);
-    },
-  },*/
-  computed: {
-    chartData() {
-      return this.chartDataInternal;
+      const responseData = this.reponse.data;
+      const dates = responseData.map((wH) => new Date(wH.date).toDateString());
+      const initialTimes = responseData.map((wH) => wH.time);
+      const dataset = [];
+      for (const dateString of labels) {
+        let notZero = false;
+        for (const [index, date] of dates.entries()) {
+          if (dateString === new Date(date).toDateString()) {
+            dataset.push(initialTimes[index]);
+            notZero = true;
+          }
+        }
+        if (notZero) continue;
+        dataset.push(0);
+      }
+      this.setChartData(labels, dataset);
     },
   },
   methods: {
+    setChartData(labels, dataset) {
+      const chartData = { ...this.chartData };
+      chartData.labels = labels;
+      chartData.datasets[0].data = dataset;
+      this.chartData = chartData;
+    },
     getData(data, labels) {
       const timesListed = data.map((wH) => wH.time / 60);
       const datesListed = data.map((wH) => new Date(wH.date));
@@ -120,7 +130,7 @@ export default {
         dates.push(new Date(dt));
         dt.setDate(dt.getDate() + 1);
       }
-      console.log(dates);
+      //console.log(dates);
       return dates.map((d) => d.toDateString());
     },
   },
