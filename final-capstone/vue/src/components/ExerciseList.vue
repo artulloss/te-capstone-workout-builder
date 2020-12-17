@@ -24,9 +24,7 @@
             </li>
             <li v-if="e.weight !== null">
               <b>Weight: </b>
-              <p :class="getExerciseClass(e)">
-                {{ e.weight }}
-              </p>
+              <p :class="getExerciseClass(e)">{{ e.weight }} lbs</p>
             </li>
             <li v-if="e.repetitions !== null">
               <b>Repetitions: </b>

@@ -46,9 +46,7 @@
                 </li>
                 <li v-if="e.repetitions !== null">
                   <b>Weight: </b>
-                  <p>
-                    {{ e.weight }}
-                  </p>
+                  <p>{{ e.weight }} lbs</p>
                 </li>
               </ul>
               <div class="flex-container flex-center">
