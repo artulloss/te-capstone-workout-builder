@@ -62,15 +62,30 @@
           </div>
         </v-expansion-panel>
       </v-expansion-panels>
-      <p v-if="!exercises.length">Welcome to your exercises page! From here, you can click on the 
-        <b>Generate Workout</b> button to generate a new workout, <b>Log Workout</b> to log the exercises you 
-        have completed, or <b>Workout History</b> to view your past workouts.
+      <p v-if="!exercises.length">
+        Welcome to your exercises page! From here, you can click on the
+        <b>Generate Workout</b> button to generate a new workout,
+        <b>Log Workout</b> to log the exercises you have completed, or
+        <b>Workout History</b> to view your past workouts.
       </p>
       <v-divider style="padding-top: 0.5rem" />
       <v-card-actions>
         <div class="flex-container">
           <v-btn color="info" :to="{ name: 'workout-history' }"
             >Workout History</v-btn
+          >
+          <v-btn
+            color="info"
+            @click="
+              completedExercises = completedExercises.every((v) => !v)
+                ? new Array(exercises.length).fill(true)
+                : new Array(exercises.length).fill(false)
+            "
+            >{{
+              completedExercises.every((v) => !v)
+                ? "Mark all complete"
+                : "Mark all incomplete"
+            }}</v-btn
           >
           <v-btn
             color="primary"
