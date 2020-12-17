@@ -19,10 +19,10 @@
             <li>
               <b>Time: </b>
               <p :class="getExerciseClass(e)">
-                {{ e.time }}
+                {{ secondsToMinutes(e.time) }}
               </p>
             </li>
-            <li v-if="e.repetitions !== null">
+            <li v-if="e.weight !== null">
               <b>Weight: </b>
               <p :class="getExerciseClass(e)">
                 {{ e.weight }}
@@ -30,11 +30,11 @@
             </li>
             <li v-if="e.repetitions !== null">
               <b>Repetitions: </b>
-              <p v-if="e.repetitions != null" :class="getExerciseClass(e)">
+              <p :class="getExerciseClass(e)">
                 {{ e.repetitions }}
               </p>
             </li>
-            <li v-if="e.repetitions !== null">
+            <li v-if="e.sets !== null">
               <b>Sets: </b>
               <p :class="getExerciseClass(e)">
                 {{ e.sets }}
@@ -90,6 +90,7 @@ export default {
     },
   },
   methods: {
+    secondsToMinutes: utilities.secondsToMinutes,
     getFocusName(id) {
       let arrayWithFocusObj = this.focuses.filter((f) => {
         return f.focusId === id;

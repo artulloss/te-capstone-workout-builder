@@ -128,6 +128,7 @@ export default {
     },
   },
   methods: {
+    secondsToMinutes: utilities.secondsToMinutes,
     logWorkout() {
       const time = this.calculateWorkoutLength();
       console.log({ time });
@@ -198,21 +199,6 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    },
-    secondsToMinutes(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      seconds = seconds % 60;
-      const minuteString = minutes === 1 ? "minute" : "minutes";
-      const secondString = seconds === 1 ? "second" : "seconds";
-      if (minutes > 0 && seconds > 0) {
-        return `${minutes} ${minuteString} and ${seconds} ${secondString}`;
-      }
-      if (minutes > 0) {
-        return `${minutes} ${minuteString}`;
-      }
-      if (seconds > 0) {
-        return `${seconds} ${secondString}`;
-      }
     },
     fixParticles() {
       setTimeout(() => {

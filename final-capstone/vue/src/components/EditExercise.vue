@@ -148,6 +148,8 @@ export default {
     },
     changeExercisePropValueBy(prop, amount) {
       let newValue = Number(this.exerciseInternal[prop]) + amount;
+      if (newValue < 0) return;
+      if (newValue === 0 && prop === "time") return;
       this.exerciseInternal[prop] = newValue === 0 ? null : newValue;
       this.onChange();
     },

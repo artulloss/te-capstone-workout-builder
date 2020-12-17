@@ -11,8 +11,8 @@
               the same 5 exercises over and over every day? Then this is the app
               for you. Trainers will be able to input exercises for cardio,
               legs, arms, abs, and back. Users will be able to login, select
-              their focus and and generate a random workout routine. Exercise
-              has never been so exciting!
+              their focus and generate a random workout routine. Exercise has
+              never been so exciting!
             </p>
           </v-card-text>
 

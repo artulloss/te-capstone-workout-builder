@@ -60,6 +60,7 @@ const fixParticles = (newData, oldData) => {
 };
 
 export default {
+  name: "admin-exercises",
   components: { ExerciseList },
   data() {
     return {
