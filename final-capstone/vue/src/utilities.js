@@ -1,5 +1,6 @@
 export default {
   numericRules: [(v) => (v || 0) >= 0 || "Negative values are not allowed"],
+  //updateNumericValue(value, amount) {}
   requiredNumericRules() {
     return (
       this.numericRules.concat((v) => (v || "").length !== 0) ||

@@ -43,7 +43,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .flex-container {
   margin-left: 2.5rem;
   align-items: center;
