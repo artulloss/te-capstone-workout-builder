@@ -98,7 +98,6 @@ export default {
       );
     },
     editExercise(exercise) {
-      console.log(document.querySelectorAll(this.getExerciseClass(exercise)));
       this.toggleExerciseVisible(exercise.exerciseId);
       if (!this.exerciseEditable[exercise.exerciseId]) {
         exerciseService.updateExercise(exercise).catch((e) => {

@@ -38,13 +38,13 @@
                     {{ e.repetitions }}
                   </p>
                 </li>
-                <li v-if="e.repetitions !== null">
+                <li v-if="e.sets !== null">
                   <b>Sets: </b>
                   <p>
                     {{ e.sets }}
                   </p>
                 </li>
-                <li v-if="e.repetitions !== null">
+                <li v-if="e.weight !== null">
                   <b>Weight: </b>
                   <p>{{ e.weight }} lbs</p>
                 </li>
@@ -133,17 +133,28 @@ export default {
       const workoutHistory = {
         userId: this.$store.state.user.userId,
         time: time,
-        date: new Date().toISOString().substring(0, 10),
+        date: this.formatLocalISO(new Date()).substr(0, 10),
       };
+      console.log({ workoutHistory });
       axios
         .post("/workoutHistory", workoutHistory)
         .then((response) => {
+          console.log(response);
           if (response.status >= 200 && response.status < 300) {
             alert("You have succesfully logged your workout");
             this.completedExercises = [];
           }
         })
         .catch((error) => console.log(error));
+    },
+    formatLocalISO(t) {
+      // Ripped from stack overflow :D
+      // https://stackoverflow.com/questions/12413243/javascript-date-format-like-iso-but-local
+      const z = t.getTimezoneOffset() * 60 * 1000;
+      let tLocal = t - z;
+      tLocal = new Date(tLocal);
+      const iso = tLocal.toISOString();
+      return iso.slice(0, 19);
     },
     calculateWorkoutLength() {
       let time = 0;
