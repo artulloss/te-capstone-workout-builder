@@ -129,7 +129,6 @@ export default {
     secondsToMinutes: utilities.secondsToMinutes,
     logWorkout() {
       const time = this.calculateWorkoutLength();
-      console.log({ time });
       if (time <= 0) return;
       const workoutHistory = {
         userId: this.$store.state.user.userId,
@@ -161,7 +160,6 @@ export default {
         index,
         !this.completedExercises[index]
       );
-      console.log("mark completed");
     },
     getFocuses() {
       // Get all the focuses
@@ -188,7 +186,6 @@ export default {
       exerciseService
         .getUserExercises(this.$store.state.user.username)
         .then((response) => {
-          console.log(response);
           if (response.status === 200) {
             this.exercises = response.data;
             //fixParticles();

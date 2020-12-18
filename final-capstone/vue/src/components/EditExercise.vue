@@ -122,19 +122,16 @@ export default {
   },
   watch: {
     pickedFocusName: function(newFocus, oldFocus) {
-      console.log("PICKED FOCUS NAME UPDATED");
       if (newFocus === oldFocus) return;
       const focusId = this.focuses[
         this.focuses.map((f) => f.focusName).indexOf(newFocus.toLowerCase())
       ].focusId;
-      console.log({ focusId });
       this.exerciseInternal.focusId = focusId;
       this.onChange();
     },
   },
   methods: {
     onChange() {
-      console.log("CHANGED");
       this.fixExercise();
       this.$emit("edit-exercise", this.exerciseInternal);
     },

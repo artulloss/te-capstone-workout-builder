@@ -76,7 +76,6 @@ export default {
     this.getExercises(); // Keep it simple and not use the filter params
     // Next we parse the route query
     let query = this.$route.query;
-    console.log(query);
     for (const prop in query) {
       if (prop === "focus") {
         this.focusFilter = query[prop];
@@ -130,7 +129,6 @@ export default {
       exerciseService
         .getTrainerExercises(this.$store.state.user.username, filter)
         .then((response) => {
-          console.log(response);
           if (response.status === 200) {
             this.internalExercises = response.data;
             fixParticles();
@@ -165,7 +163,6 @@ export default {
       this.updateUrl();
     },
     editExercise(exercise) {
-      console.log("EDIT EXERCISE", exercise);
       const index = this.internalExercises
         .map((e) => e.exerciseId)
         .indexOf(exercise.exerciseId);

@@ -4,7 +4,6 @@ export default {
   getTrainerExercises(name, filter = {}) {
     let route = `/user/${name}/trainer/exercise`;
     route += this.getQueryRoute(filter);
-    console.log("getQueryRoute", this.getQueryRoute(filter));
     return axios.get(route);
   },
   getUserExercises(username) {
@@ -12,18 +11,15 @@ export default {
   },
   postExercise(exercise) {
     let response = axios.post("/exercise", exercise);
-    console.log(response);
     return response;
   },
   updateExercise(exercise) {
     // This route should probably be made to be /exercise/{id}
     let response = axios.put("/exercise", exercise);
-    console.log(response);
     return response;
   },
   deleteExercise(exerciseId) {
     let response = axios.delete(`/exercise/${exerciseId}`);
-    console.log(response);
     return response;
   },
   addUserExercises(username, exercises) {

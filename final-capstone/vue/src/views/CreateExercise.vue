@@ -151,13 +151,10 @@ export default {
   methods: {
     createExercise() {
       let arrayWithFocusObj = this.focuses.filter((f) => {
-        console.log(f.focusName, this.pickedFocusName.toLowerCase());
         return f.focusName === this.pickedFocusName.toLowerCase();
       });
       const exercise = this.exercise;
       let field;
-      console.log("Exercise", exercise.name, !exercise.name);
-
       if (!exercise.exerciseName) {
         field = "Name";
       } else if (!exercise.description) {
@@ -192,7 +189,6 @@ export default {
       exerciseService
         .postExercise(exercise)
         .then((response) => {
-          console.log(response.status);
           if (response.status === 201) {
             this.$router.push({ name: "admin-exercises" });
           }

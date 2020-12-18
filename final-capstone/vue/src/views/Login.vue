@@ -87,7 +87,6 @@ export default {
             this.$store.commit("SET_AUTH_TOKEN", response.data.token);
             const user = response.data.user;
             this.$store.commit("SET_USER", user);
-            console.log("GOT HERE");
             if (user.role === "admin") {
               this.$router.push({ name: "admin-exercises" });
               return;
