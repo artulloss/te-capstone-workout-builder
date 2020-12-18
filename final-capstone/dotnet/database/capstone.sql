@@ -167,7 +167,8 @@ VALUES ('Butt Kicks', 1, 'Standing tall, you are going to alternate, kicking you
          N'Start lying on your back. Maintain this position throughout the whole movement. Bend your knees and place your feet on the floor. Begin by lifting your shoulders off the floor, and at the same time lift your knees and feet off the floor to a 90� angle. While maintaining this position with your back pressed into the ground, start to rock back and forth.', null, 20, null, null,2),
        ('Bicycle Crunch', 5, 'Start by lying on the ground, with your lower back pressed flat into the floor and your head and shoulders raised slightly above it. Place your hands lightly on the sides of your head; do not knit your fingers behind. Lift one leg just off the ground and extend it out. Lift the other leg and bend your knee towards your chest. As you do so twist through your core so the opposite arm comes towards the raised knee. Your elbow should stay in same position relative to your head throughout. Lower your leg and arm at the same time while bringing up the opposite two limbs to mirror the movement.', null, 180, 10, 3,2)
 
-
+--workout History
+INSERT INTO workoutHistory VALUES (1, 600, '2020-12-13'), (1, 1200, '2020-12-14'), (1, 600, '2020-12-15'), (1, 300, '2020-12-17')
 
 
 
